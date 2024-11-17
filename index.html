@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>OpenTalkGPT</title>
+    <!-- <link rel="icon" type="image/x-icon" href="/images/favicon.ico"> -->
+    <link rel="icon" type="images/x-icon" href="icon48.png">
+    <link rel="stylesheet" type="text/css" href="static/css/common.css">
+    <link href="static/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- nav bar start -->
+    <nav class="navbar sticky-top navbar-light bg-dark text-light mb-4">
+        <div class="container-fluid">
+            <h4 id="headTitle" class="text-center">
+                <i style="color:rgba(255, 165, 0, 0.85);;font-size: 1.5rem !important;">
+                    OpenTalkGPT
+                </i>
+            </h4>
+            <div class="buttongGroup">
+                <span class="badge text-black customBtn-primary" id="modalInfo" title="Seleted modal">DOWNLOADED</span>
+                <span title="Settings" class="mx-2 oppenSettingsModal" id="openSettingIcon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        class="bi bi-gear-wide-connected svg-Me" viewBox="0 0 16 16">
+                        <path
+                            d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z" />
+                    </svg>
+                </span>
+                <span title="About Me" id="opneIntroIcon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle svg-Me" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                      </svg>
+                </span>
+                <a href="faq.html" title="FAQ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="mx-2 bi bi-question-circle-fill svg-Me" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247m2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"/>
+                      </svg>
+                </a>
+            </div>
+        </div>
+    </nav>
+    <!-- nav bar start -->
+
+
+    <!-- setting start -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#openSettingModal"
+        id="openSettingModalBtn" hidden>
+        Open Setting
+    </button>
+    <div class="modal fade" id="openSettingModal" tabindex="-1" aria-labelledby="openSettingModal" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- modal nav start -->
+                    <nav id="settings-scroll" class="backgroundLightWhite navbar px-3">
+                        <a class="navbar-brand customTextCss">Manage Setting</a>
+                        <ul class="nav nav-pills">
+                            <li class="nav-item">
+                                <a class="nav-link openSettingDiv activeTab" name="ollamaSettingsDiv" href="#">Modal Settings</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link openSettingDiv" name="ollamaModalDownloadDiv" href="#">Manage
+                                    Modal</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link openSettingDiv" name="ollamaDownloadDiv" href="#">Download Ollama</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link openSettingDiv" name="ollamaInfoDiv" href="#">Info & Features</a>
+                            </li>
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </nav>
+                    <!-- modal nav start -->
+                </div>
+                <div class="modal-body">
+                    <div data-bs-spy="scroll" data-bs-target="#settings-scroll" data-bs-root-margin="0px 0px -40%"
+                        data-bs-smooth-scroll="true" class="backgroundLightWhite scrollspy-example p-3 rounded-2"
+                        tabindex="0">
+                        <!-- Ollama Setting Start -->
+                        <div class="container scrollDiv settingsContDiv" id="ollamaSettingsDiv">
+                            <h4 id="ollamaSettingsDiv">Modal Settings</h4>
+                            <div class="mb-2 row">
+                                <div class="row">
+                                    <label for="settingsType" class="col-sm-2 col-form-label">Settings Type</label>
+                                    <div class="col-sm-10 d-flex align-items-center">
+                                        <div class="form-check col-sm-2">
+                                            <input class="form-check-input settingsType ollamaSettings" type="radio"
+                                                name="settingsType" value="basic">
+                                            <label class="form-check-label mx-1" for="basicSettings">
+                                                Basic
+                                            </label>
+                                        </div>
+                                        <div class="form-check col-sm-2">
+                                            <input class="form-check-input settingsType ollamaSettings" type="radio"
+                                                name="settingsType" value="advance">
+                                            <label class="form-check-label" for="advanceSettings">
+                                                Advance
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Advance settings -->
+                            <div class="row" id="advanceSettings">
+                                <div class="mb-2 row">
+                                    <label for="requestProtocol" class="col-sm-2 col-form-label">Protocol</label>
+                                    <div class="col-sm-10 d-flex align-items-center">
+                                        <div class="form-check col-sm-2">
+                                            <input class="form-check-input ollamaSettings requestProtocol" type="radio"
+                                                name="requestProtocol" id="httpProtocol" value="http">
+                                            <label class="form-check-label mx-1" for="httpProtocol">
+                                                Http
+                                            </label>
+                                        </div>
+                                        <div class="form-check col-sm-2">
+                                            <input class="form-check-input ollamaSettings requestProtocol" type="radio"
+                                                name="requestProtocol" id="httpsProtocol" value="https">
+                                            <label class="form-check-label" for="httpsProtocol">
+                                                Https
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-2 row">
+                                    <label for="hostName" class="col-sm-2 col-form-label">Hostname</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control w-50 ollamaSettings"
+                                            placeholder="localhost" id="hostName" value="localhost">
+                                    </div>
+                                </div>
+                                <div class="mb-2 row">
+                                    <label for="ollamaPort" class="col-sm-2 col-form-label">Port</label>
+                                    <div class="col-sm-10">
+                                        <input type="Port" value="11434" class="form-control w-50 ollamaSettings"
+                                            placeholder="11434" id="ollamaPort">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Advance settings end -->
+
+                            <!-- Basic Settings  -->
+                            <div class="mb-2 row" id="basicSettings" hidden>
+                                <div class="mb-2 row">
+                                    <label for="modalUri" class="col-sm-2 col-form-label">Uri</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="modalConnectionUri" name="modalConnectionUri"
+                                            class="form-control w-50 ollamaSettings"
+                                            placeholder="Please enter value like http://localhost:11434" id="hostName"
+                                            value="http://localhost:11434">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Basic Settings End -->
+                            <!-- Common Settings -->
+                            <div class="mb-2 row">
+                                <!-- Modal List -->
+                                <div class="mb-2 row">
+                                    <label for="modalList" class="col-sm-2 col-form-label">Modal List</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-select w-50 ollamaSettings"
+                                            aria-label="Default select example" id="modalList">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-2 row">
+                                    <label for="useEmogi" class="col-sm-2 col-form-label">Use Emoji</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-check-input ollamaSettings" style="margin-top: 13px;"
+                                            type="checkbox" id="useEmogi" value="" aria-label="...">
+                                    </div>
+                                </div>
+                                <div class="mb-2 row">
+                                    <label for="resetSettings" class="col-sm-2 col-form-label">Reset Settings</label>
+                                    <div class="col-sm-10">
+                                        <button type="button" title="Click here to reset settings"
+                                            class="customBtn-sm customBtn-danger button--neumorphic" id="resetSettings">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                fill="currentColor" class="bi bi-recycle" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M9.302 1.256a1.5 1.5 0 0 0-2.604 0l-1.704 2.98a.5.5 0 0 0 .869.497l1.703-2.981a.5.5 0 0 1 .868 0l2.54 4.444-1.256-.337a.5.5 0 1 0-.26.966l2.415.647a.5.5 0 0 0 .613-.353l.647-2.415a.5.5 0 1 0-.966-.259l-.333 1.242zM2.973 7.773l-1.255.337a.5.5 0 1 1-.26-.966l2.416-.647a.5.5 0 0 1 .612.353l.647 2.415a.5.5 0 0 1-.966.259l-.333-1.242-2.545 4.454a.5.5 0 0 0 .434.748H5a.5.5 0 0 1 0 1H1.723A1.5 1.5 0 0 1 .421 12.24zm10.89 1.463a.5.5 0 1 0-.868.496l1.716 3.004a.5.5 0 0 1-.434.748h-5.57l.647-.646a.5.5 0 1 0-.708-.707l-1.5 1.5a.5.5 0 0 0 0 .707l1.5 1.5a.5.5 0 1 0 .708-.707l-.647-.647h5.57a1.5 1.5 0 0 0 1.302-2.244z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <p id="successMessage" class="text-success mt-2 blinking-text"><strong>Changes will be saved automatically when you make any updates.</strong></p>
+                            <!-- Common Settings End -->
+                            <div>
+                                <span class="coustomMessage" id="settingsMessage"></span>
+                                <p>For any issue please check the solution <a target="_blank"
+                                        href="https://github.com/ollama/ollama/blob/main/docs/faq.md">here</a>
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Ollama Setting End -->
+
+                        <!-- Ollama Modal Downlod Start -->
+                        <div class="container scrollDiv settingsContDiv" id="ollamaModalDownloadDiv" hidden>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h4>Manage Modal</h4>
+                                </div>
+                                <div class="col-md-9"><span class="coustomMessage" id="downloadMessage"></span></div>
+                            </div>
+                            <div class="bd-example mt-2">
+                                <table class="table table-striped table-bordered border-success">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="backgroundLightWhite">#</th>
+                                            <th scope="col" class="backgroundLightWhite w-15">Modal Name</th>
+                                            <th scope="col" class="backgroundLightWhite w-15 text-center">Size</th>
+                                            <th scope="col" class="backgroundLightWhite w-15 text-center">Action</th>
+                                            <th scope="col" class="backgroundLightWhite w-50">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="modalTableBody">
+                                        <!-- <tr>
+                                            <th scope="row" class="backgroundLightWhite">1</th>
+                                            <td class="backgroundLightWhite">Mark</td>
+                                            <td class="backgroundLightWhite">Otto</td>
+                                            <td class="backgroundLightWhite">@mdo</td>
+                                        </tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- Ollama Modal Downlod End -->
+
+                        <!-- Ollama Downlod Start -->
+                        <div class="container scrollDiv settingsContDiv" id="ollamaDownloadDiv" hidden>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h4>Ollama Download</h4>
+                                </div>
+                                <div
+                                    class="row row-cols-1 row-cols-md-4 mb-3 text-center d-flex justify-content-around">
+                                    <div class="col">
+                                        <div class="card rounded-3 shadow-sm downloadCard"
+                                            title="Click here for more info" id="windowDownloadDiv">
+                                            <div class="card-header py-2">
+                                                <h4 class="my-0 fw-normal">Window</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <svg fill="currentColor" stroke-width="0" viewBox="0 0 448 512"
+                                                    class="b h-8 w-8 p-1 downloadSvg mt-2 mb-2"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M0 93.7l183.6-25.3v177.4H0V93.7zm0 324.6l183.6 25.3V268.4H0v149.9zm203.8 28L448 480V268.4H203.8v177.9zm0-380.6v180.1H448V32L203.8 65.7z">
+                                                    </path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="card rounded-3 shadow-sm downloadCard"
+                                            title="Click here for more info" id="linuxDownloadDiv">
+                                            <div class="card-header py-2">
+                                                <h4 class="my-0 fw-normal">Linux</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <svg stroke="   currentColor" fill="currentColor" stroke-width="0"
+                                                    viewBox="0 0 448 512" class="h-8 w-8 p-0.5 downloadSvg mt-2 mb-2"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M220.8 123.3c1 .5 1.8 1.7 3 1.7 1.1 0 2.8-.4 2.9-1.5.2-1.4-1.9-2.3-3.2-2.9-1.7-.7-3.9-1-5.5-.1-.4.2-.8.7-.6 1.1.3 1.3 2.3 1.1 3.4 1.7zm-21.9 1.7c1.2 0 2-1.2 3-1.7 1.1-.6 3.1-.4 3.5-1.6.2-.4-.2-.9-.6-1.1-1.6-.9-3.8-.6-5.5.1-1.3.6-3.4 1.5-3.2 2.9.1 1 1.8 1.5 2.8 1.4zM420 403.8c-3.6-4-5.3-11.6-7.2-19.7-1.8-8.1-3.9-16.8-10.5-22.4-1.3-1.1-2.6-2.1-4-2.9-1.3-.8-2.7-1.5-4.1-2 9.2-27.3 5.6-54.5-3.7-79.1-11.4-30.1-31.3-56.4-46.5-74.4-17.1-21.5-33.7-41.9-33.4-72C311.1 85.4 315.7.1 234.8 0 132.4-.2 158 103.4 156.9 135.2c-1.7 23.4-6.4 41.8-22.5 64.7-18.9 22.5-45.5 58.8-58.1 96.7-6 17.9-8.8 36.1-6.2 53.3-6.5 5.8-11.4 14.7-16.6 20.2-4.2 4.3-10.3 5.9-17 8.3s-14 6-18.5 14.5c-2.1 3.9-2.8 8.1-2.8 12.4 0 3.9.6 7.9 1.2 11.8 1.2 8.1 2.5 15.7.8 20.8-5.2 14.4-5.9 24.4-2.2 31.7 3.8 7.3 11.4 10.5 20.1 12.3 17.3 3.6 40.8 2.7 59.3 12.5 19.8 10.4 39.9 14.1 55.9 10.4 11.6-2.6 21.1-9.6 25.9-20.2 12.5-.1 26.3-5.4 48.3-6.6 14.9-1.2 33.6 5.3 55.1 4.1.6 2.3 1.4 4.6 2.5 6.7v.1c8.3 16.7 23.8 24.3 40.3 23 16.6-1.3 34.1-11 48.3-27.9 13.6-16.4 36-23.2 50.9-32.2 7.4-4.5 13.4-10.1 13.9-18.3.4-8.2-4.4-17.3-15.5-29.7zM223.7 87.3c9.8-22.2 34.2-21.8 44-.4 6.5 14.2 3.6 30.9-4.3 40.4-1.6-.8-5.9-2.6-12.6-4.9 1.1-1.2 3.1-2.7 3.9-4.6 4.8-11.8-.2-27-9.1-27.3-7.3-.5-13.9 10.8-11.8 23-4.1-2-9.4-3.5-13-4.4-1-6.9-.3-14.6 2.9-21.8zM183 75.8c10.1 0 20.8 14.2 19.1 33.5-3.5 1-7.1 2.5-10.2 4.6 1.2-8.9-3.3-20.1-9.6-19.6-8.4.7-9.8 21.2-1.8 28.1 1 .8 1.9-.2-5.9 5.5-15.6-14.6-10.5-52.1 8.4-52.1zm-13.6 60.7c6.2-4.6 13.6-10 14.1-10.5 4.7-4.4 13.5-14.2 27.9-14.2 7.1 0 15.6 2.3 25.9 8.9 6.3 4.1 11.3 4.4 22.6 9.3 8.4 3.5 13.7 9.7 10.5 18.2-2.6 7.1-11 14.4-22.7 18.1-11.1 3.6-19.8 16-38.2 14.9-3.9-.2-7-1-9.6-2.1-8-3.5-12.2-10.4-20-15-8.6-4.8-13.2-10.4-14.7-15.3-1.4-4.9 0-9 4.2-12.3zm3.3 334c-2.7 35.1-43.9 34.4-75.3 18-29.9-15.8-68.6-6.5-76.5-21.9-2.4-4.7-2.4-12.7 2.6-26.4v-.2c2.4-7.6.6-16-.6-23.9-1.2-7.8-1.8-15 .9-20 3.5-6.7 8.5-9.1 14.8-11.3 10.3-3.7 11.8-3.4 19.6-9.9 5.5-5.7 9.5-12.9 14.3-18 5.1-5.5 10-8.1 17.7-6.9 8.1 1.2 15.1 6.8 21.9 16l19.6 35.6c9.5 19.9 43.1 48.4 41 68.9zm-1.4-25.9c-4.1-6.6-9.6-13.6-14.4-19.6 7.1 0 14.2-2.2 16.7-8.9 2.3-6.2 0-14.9-7.4-24.9-13.5-18.2-38.3-32.5-38.3-32.5-13.5-8.4-21.1-18.7-24.6-29.9s-3-23.3-.3-35.2c5.2-22.9 18.6-45.2 27.2-59.2 2.3-1.7.8 3.2-8.7 20.8-8.5 16.1-24.4 53.3-2.6 82.4.6-20.7 5.5-41.8 13.8-61.5 12-27.4 37.3-74.9 39.3-112.7 1.1.8 4.6 3.2 6.2 4.1 4.6 2.7 8.1 6.7 12.6 10.3 12.4 10 28.5 9.2 42.4 1.2 6.2-3.5 11.2-7.5 15.9-9 9.9-3.1 17.8-8.6 22.3-15 7.7 30.4 25.7 74.3 37.2 95.7 6.1 11.4 18.3 35.5 23.6 64.6 3.3-.1 7 .4 10.9 1.4 13.8-35.7-11.7-74.2-23.3-84.9-4.7-4.6-4.9-6.6-2.6-6.5 12.6 11.2 29.2 33.7 35.2 59 2.8 11.6 3.3 23.7.4 35.7 16.4 6.8 35.9 17.9 30.7 34.8-2.2-.1-3.2 0-4.2 0 3.2-10.1-3.9-17.6-22.8-26.1-19.6-8.6-36-8.6-38.3 12.5-12.1 4.2-18.3 14.7-21.4 27.3-2.8 11.2-3.6 24.7-4.4 39.9-.5 7.7-3.6 18-6.8 29-32.1 22.9-76.7 32.9-114.3 7.2zm257.4-11.5c-.9 16.8-41.2 19.9-63.2 46.5-13.2 15.7-29.4 24.4-43.6 25.5s-26.5-4.8-33.7-19.3c-4.7-11.1-2.4-23.1 1.1-36.3 3.7-14.2 9.2-28.8 9.9-40.6.8-15.2 1.7-28.5 4.2-38.7 2.6-10.3 6.6-17.2 13.7-21.1.3-.2.7-.3 1-.5.8 13.2 7.3 26.6 18.8 29.5 12.6 3.3 30.7-7.5 38.4-16.3 9-.3 15.7-.9 22.6 5.1 9.9 8.5 7.1 30.3 17.1 41.6 10.6 11.6 14 19.5 13.7 24.6zM173.3 148.7c2 1.9 4.7 4.5 8 7.1 6.6 5.2 15.8 10.6 27.3 10.6 11.6 0 22.5-5.9 31.8-10.8 4.9-2.6 10.9-7 14.8-10.4s5.9-6.3 3.1-6.6-2.6 2.6-6 5.1c-4.4 3.2-9.7 7.4-13.9 9.8-7.4 4.2-19.5 10.2-29.9 10.2s-18.7-4.8-24.9-9.7c-3.1-2.5-5.7-5-7.7-6.9-1.5-1.4-1.9-4.6-4.3-4.9-1.4-.1-1.8 3.7 1.7 6.5z">
+                                                    </path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="card rounded-3 shadow-sm downloadCard"
+                                            title="Click here for more info" id="macDownloadDiv">
+                                            <div class="card-header py-2">
+                                                <h4 class="my-0 fw-normal">MacOs</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <svg fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024"
+                                                    class="h-8 w-8 p-1 downloadSvg mt-2 mb-2"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M747.4 535.7c-.4-68.2 30.5-119.6 92.9-157.5-34.9-50-87.7-77.5-157.3-82.8-65.9-5.2-138 38.4-164.4 38.4-27.9 0-91.7-36.6-141.9-36.6C273.1 298.8 163 379.8 163 544.6c0 48.7 8.9 99 26.7 150.8 23.8 68.2 109.6 235.3 199.1 232.6 46.8-1.1 79.9-33.2 140.8-33.2 59.1 0 89.7 33.2 141.9 33.2 90.3-1.3 167.9-153.2 190.5-221.6-121.1-57.1-114.6-167.2-114.6-170.7zm-105.1-305c50.7-60.2 46.1-115 44.6-134.7-44.8 2.6-96.6 30.5-126.1 64.8-32.5 36.8-51.6 82.3-47.5 133.6 48.4 3.7 92.6-21.2 129-63.7z">
+                                                    </path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="w-100 d-flex justify-content-center mt-2">
+                                        <div class="linuxMessage" id="linuxDownloadDivBtn">
+                                            <p>Install with one command:</p><span
+                                                class="bg-white text-center rounded p-1 px-4 mt-1">curl -fsSL
+                                                https://ollama.com/install.sh | sh</span>
+                                            <div class="">
+                                                <a class="badge text-black"
+                                                    href="https://github.com/ollama/ollama/blob/main/scripts/install.sh"
+                                                    target="_blank">
+                                                    View script source
+                                                </a>
+                                                <a class="badge text-black"
+                                                    href="https://github.com/ollama/ollama/blob/main/docs/linux.md"
+                                                    target="_blank">
+                                                    Manual install instructions
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div id="ollamaDownloadBtnDiv" class="w-50 mt-4" hidden>
+                                            <a href="#" id="ollamaDownloadBtn" title="Click here to download"
+                                                class="w-50 btn btn-outline-dark">Download<svg
+                                                    xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                    fill="currentColor" class="mx-2 bi bi-arrow-down-circle"
+                                                    viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd"
+                                                        d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z" />
+                                                </svg></a>
+                                            <p class="mt-1"><strong>Note : </strong> <span
+                                                    id="ollamaDownloadNotes"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Ollama Modal Downlod End -->
+
+                        <!-- Ollama Features Start -->
+                        <div class="container scrollDiv settingsContDiv" id="ollamaInfoDiv" hidden>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h4>Info & Features</h4>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-5 d-flex flex-column align-items-start gap-2">
+                                        <p class="text-body-black">This Chrome extension enables users to chat seamlessly with any open-source model, like LLaMA, supported by Ollama.<br><br> With a sleek, user-friendly UI, users can configure server details, manage models, and interact with their favorite AI assistants.<br><br> The extension offers complete flexibility to download, delete, and personalize models directly from the interface, making it a versatile tool for AI enthusiasts and developers alike. </p>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="row row-cols-1 row-cols-sm-2 g-4">
+                                            <div class="col d-flex flex-column gap-2">
+                                                <div
+                                                    class="text-start">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-lock featureSvg" viewBox="0 0 16 16">
+                                                        <path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/>
+                                                        <path d="M9.5 6.5a1.5 1.5 0 0 1-1 1.415l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99a1.5 1.5 0 1 1 2-1.415"/>
+                                                      </svg>
+                                                </div>
+                                                <h4 class="fw-semibold mb-0 text-body-emphasis">Work Offline</h4>
+                                                <p class="text-body-secondary">You can talk with modal without internet after setup.</p>
+                                            </div>
+
+                                            <div class="col d-flex flex-column gap-2">
+                                                <div
+                                                    class="text-start">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-kanban featureSvg" viewBox="0 0 16 16">
+                                                        <path d="M13.5 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm-11-1a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                                                        <path d="M6.5 3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zm-4 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zm8 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1z"/>
+                                                      </svg>
+                                                </div>
+                                                <h4 class="fw-semibold mb-0 text-body-emphasis">Easy Management</h4>
+                                                <p class="text-body-secondary">Download, configure, and delete models from a simple, intuitive UI.</p>
+                                            </div>
+
+                                            <div class="col d-flex flex-column gap-2">
+                                                <div
+                                                    class="text-start">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-lock featureSvg" viewBox="0 0 16 16">
+                                                        <path d="M8 5a1 1 0 0 1 1 1v1H7V6a1 1 0 0 1 1-1m2 2.076V6a2 2 0 1 0-4 0v1.076c-.54.166-1 .597-1 1.224v2.4c0 .816.781 1.3 1.5 1.3h3c.719 0 1.5-.484 1.5-1.3V8.3c0-.627-.46-1.058-1-1.224M6.105 8.125A.64.64 0 0 1 6.5 8h3a.64.64 0 0 1 .395.125c.085.068.105.133.105.175v2.4c0 .042-.02.107-.105.175A.64.64 0 0 1 9.5 11h-3a.64.64 0 0 1-.395-.125C6.02 10.807 6 10.742 6 10.7V8.3c0-.042.02-.107.105-.175"/>
+                                                        <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"/>
+                                                      </svg>
+                                                </div>
+                                                <h4 class="fw-semibold mb-0 text-body-emphasis">Secure Data</h4>
+                                                <p class="text-body-secondary">We are not storing any data.Therefore it is working offline also.</p>
+                                            </div>
+
+                                            <div class="col d-flex flex-column gap-2">
+                                                <div
+                                                    class="text-start">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-joystick featureSvg" viewBox="0 0 16 16">
+                                                        <path d="M10 2a2 2 0 0 1-1.5 1.937v5.087c.863.083 1.5.377 1.5.726 0 .414-.895.75-2 .75s-2-.336-2-.75c0-.35.637-.643 1.5-.726V3.937A2 2 0 1 1 10 2"/>
+                                                        <path d="M0 9.665v1.717a1 1 0 0 0 .553.894l6.553 3.277a2 2 0 0 0 1.788 0l6.553-3.277a1 1 0 0 0 .553-.894V9.665c0-.1-.06-.19-.152-.23L9.5 6.715v.993l5.227 2.178a.125.125 0 0 1 .001.23l-5.94 2.546a2 2 0 0 1-1.576 0l-5.94-2.546a.125.125 0 0 1 .001-.23L6.5 7.708l-.013-.988L.152 9.435a.25.25 0 0 0-.152.23"/>
+                                                      </svg>
+                                                </div>
+                                                <h4 class="fw-semibold mb-0 text-body-emphasis">Easy to Use</h4>
+                                                <p class="text-body-secondary">With a user-friendly UI, it is easy to use and helps to manage models.</p>                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Ollama Modal Downlod End -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- setting end -->
+
+
+    <!-- Owner Info -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ownerModal" id="openModalBtn"
+        hidden>
+        Open MyInfo
+    </button>
+    <div class="modal fade" id="ownerModal" tabindex="-1" aria-labelledby="ownerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="ownerModalLabel">About Me</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img src="static/images/owner.jpg" id="ownerImage" alt="owner">
+                                <h3>Adarsh Mishra</h3>
+                                <a href="https://in.linkedin.com/in/adarsh-mishra-469811205" target="_blank"
+                                    class="mt-3 badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-linkedin" viewBox="0 0 16 16">
+                                        <path
+                                            d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z">
+                                        </path>
+                                    </svg><span class="mx-2">adarshmishra03</span>
+                                </a>
+                                <button
+                                    class="mt-1 badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-google" viewBox="0 0 16 16">
+                                        <path
+                                            d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z">
+                                        </path>
+                                    </svg>
+                                    <span class="mx-2">adarshmishra812003@gmail.com</span>
+                                </button>
+
+                            </div>
+                            <div class="col-md-8">
+                                <p class="text-start">
+                                <p>My name is <strong>Adarsh Siddharth Shankar Mishra</strong> from Thane. I completed
+                                    my B.Sc. in IT
+                                    from the University of Mumbai in 2023. Currently, I am working as an
+                                    <strong>Associate Software Engineer</strong>.
+                                </p>
+
+                                <p>This extension will help you create your own chatbot using any open-source model
+                                    supported by Ollama. It also help you to integrate models like LLaMA and others
+                                    into your application. With this tool, you can download or delete models as
+                                    needed.<br><br>
+                                    <strong>The first extension that helps you download any open-source model through a
+                                        UI, supported by Ollama.</strong>
+                                </p>
+
+                                <p>Please connect with me on LinkedIn or send me an email for any inquiries.</p>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Owner end -->
+
+    <!-- main welcome page -->
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class="card customCard chatDiv" id="modalErrorDiv">
+            <img src="static/images/oppsImage.png" class="card-img" alt="...">
+            <div class="card-img-overlay">
+                <h4 class="card-title"><strong>Opps!!</strong></h4>
+                <p class="card-text">Not able to connect with a ollama modal.Please check ollama running or not or check
+                    modal settings at
+                    <a href="#" class="oppenSettingsModal">here.</a><br><br>If you are here for first time then download
+                    the ollama from <a href="#" class="oppenSettingsModal">here.</a> to do setup.<br><br>
+                    <span> <strong>Basic Tips :</strong>
+                        <ul>
+                            <li>Always upgrage your modal with latest version.</li>
+                            <li>
+                                For any issue please check faq or drop a mail to me.
+                            </li>
+                        </ul>
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- main welcome page end -->
+
+    <!-- main chat body -->
+    <div id="chatContainer" class="container" hidden>
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-12">
+                <p id="watermark"><i><span class="text-danger">Note : </span> Some time it can give wrong
+                        response.</i></p>
+                <div class="chatDiv" id="chat">
+                    <div class='text-center' id='welcomeDiv'>
+                        <div class="row">
+                            <div class="col-md-4 mt-4 setBotRole">
+                                <div class="card card-orange" title="Click here to set role">
+                                    <div class="card-header">
+                                        Readme Generator
+                                    </div>
+                                    <div class="card-body botRole">
+                                        <p class="card-text text-start">Act as readme genrator and help us to gerate
+                                            readme file based on user request</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mt-4 setBotRole">
+                                <div class="card card-red" title="Click here to set role">
+                                    <div class="card-header">
+                                        Interviewer
+                                    </div>
+                                    <div class="card-body botRole">
+                                        <p class="card-text text-start">Act as Interviewer and ask question to fresher
+                                            for software engineer role</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mt-4 setBotRole">
+                                <div class="card  card-blue" title="Click here to set role">
+                                    <div class="card-header">
+                                        Code Reviewer
+                                    </div>
+                                    <div class="card-body botRole">
+                                        <p class="card-text text-start">Act as Code Reviewer check the user code and
+                                            give the point out of 10.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- sccond row -->
+                            <div class="col-md-4 mt-4 setBotRole">
+                                <div class="card card-lightblue" title="Click here to set role">
+                                    <div class="card-header">
+                                        Sql Developer
+                                    </div>
+                                    <div class="card-body botRole">
+                                        <p class="card-text text-start">Act as sql developer give sql query to user
+                                            based on their question</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="robot-wrapper">
+                                    <img id="botImage" src='static/images/robotHii.gif' title="You Found me ;)">
+                                </div>
+
+                                <span><br>
+                                    <strong>Hello,</strong>How
+                                    can i help you ?
+                                </span>
+                            </div>
+                            <div class="col-md-4 mt-4">
+                                <div class="card card-lightyellow">
+                                    <div class="card-header">
+                                        Coustom
+                                    </div>
+                                    <div class="card-body botRole">
+                                        <input class="card-text text-start form-control" id="coustomInput"
+                                            placeholder="Enter your costome role">
+                                        <button class="btn btn-success mt-1" title="Click here to set role"
+                                            id="setCustomBotRole">Set</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Query Buttons -->
+                <div class="buttonSec my-3 container" style="position: absolute !important;bottom: 10px !important;">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <div class="input-group" style="border: 1px solid !important;border-radius: 5px !important;">
+                                <span class="input-group-text" id="basic-addon1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-robot" viewBox="0 0 16 16">
+                                        <path
+                                            d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5M3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.6 26.6 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.93.93 0 0 1-.765.935c-.845.147-2.34.346-4.235.346s-3.39-.2-4.235-.346A.93.93 0 0 1 3 9.219zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a25 25 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25 25 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135">
+                                        </path>
+                                        <path
+                                            d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5">
+                                        </path>
+                                    </svg>
+                                </span>
+                                <textarea type="text" id="userInput" style="border-left: 1px solid !important;" rows="1" class="form-control"
+                                    placeholder="Type your question..." aria-label="Input group example"
+                                    aria-describedby="basic-addon1"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <button id="askQuestion" class="customBtn customBtn-primary button--neumorphic"
+                                title="Click here to submit question">Ask</button>
+                            <button id="stopChat" class="customBtn customBtn-danger button--neumorphic"
+                                title="Click here to stop chat" hidden>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                    class="bi bi-stop-circle-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.5 5A1.5 1.5 0 0 0 5 6.5v3A1.5 1.5 0 0 0 6.5 11h3A1.5 1.5 0 0 0 11 9.5v-3A1.5 1.5 0 0 0 9.5 5z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- main chat body end -->
+
+
+    <script src="static/js/common.js"></script>
+    <script src="static/js/script.js"></script>
+    <script src="static/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

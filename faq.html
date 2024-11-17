@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>OpenTalkGPT</title>
+    <link rel="icon" type="images/x-icon" href="icon48.png">
+    <link rel="stylesheet" type="text/css" href="static/css/common.css">
+    <link href="static/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Apply background color to the entire page */
+        body {
+            background-color: #E3F2FD !important;
+            color: black !important;
+        }
+
+        /* Optional: Add some padding for better spacing */
+        .container {
+            padding: 20px;
+        }
+
+        .accordion-item {
+            border: 1px solid #BBDEFB; /* Light border color */
+            border-radius: 5px;
+        }
+
+        .accordion-header button {
+            background-color: #90CAF9; /* Light blue for accordion buttons */
+            color: #fff; /* White text for better contrast */
+            font-size: 1.1rem;
+        }
+
+        .accordion-header button:hover {
+            background-color: #64B5F6; /* Slightly darker on hover */
+        }
+
+        .accordion-body {
+            background-color: #E3F2FD; /* Match page background for accordion content */
+            font-size: 1rem;
+        }
+
+        h1 {
+            color: #1A237E;
+            font-size: 2.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <a href="index.html" style="color: #1A237E !important;font-size: 20px;"> < Back </a><h1 class="text-center mb-4">OpenTalkGPT FAQ &#x1F916;</h1>
+
+        <p class="mb-4 text-center">
+            &#x1F31F; This Chrome extension enables users to chat seamlessly with any open-source model, like <strong>LLaMA</strong>, supported by <strong>Ollama</strong>. <br>
+            &#x1F680; With a sleek, user-friendly UI, users can configure server details, manage models, and interact with their favorite AI assistants.<br>
+            &#x1F3AF; The extension offers complete flexibility to download, delete, and personalize models directly from the interface, making it a versatile tool for AI enthusiasts and developers alike.
+        </p>
+
+        <div class="accordion" id="accordionExample">
+            <!-- FAQ 1 -->
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        &#x26A0; I have downloaded the extension but getting "Oops" page
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <strong>Solution:</strong> Please check if <strong>Ollama</strong> is running. If it's not running, download it
+                        from the download section. If it is running, configure the changes in the modal settings session
+                        and check again.
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ 2 -->
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        &#x1F422; I am getting slow response from the model
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <strong>Solution:</strong> Ensure that your system has a minimum of <strong>4GB RAM</strong>. If sufficient RAM is available, the
+                        response will be faster.
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        &#x1F310; Does it work offline as well?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <strong>Solution:</strong> Yes, it will work once the setup is done on your side.
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ 4 -->
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        &#x1F4C2; Can we check the code or contribute?
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <strong>Solution:</strong> You can check the code and follow the steps from the GitHub link
+                        provided below:
+                        <br>
+                        <a href="https://github.com/adarshM84/OpenTalkGpt" target="_blank">OpenTalkGPT GitHub Repository</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ 5 -->
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingFive">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        &#x2753; I am facing issues during the setup of Ollama
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <strong>Solution:</strong> Please check the FAQ link provided in the modal settings or send me
+                        an email for further assistance.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="static/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
