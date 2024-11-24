@@ -65,10 +65,14 @@
                                     Modal</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link openSettingDiv" name="ollamaCreateModalDiv" href="#">Custom
+                                    Modal</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link openSettingDiv" name="ollamaDownloadDiv" href="#">Download Ollama</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link openSettingDiv" name="ollamaInfoDiv" href="#">Info & Features</a>
+                                <a class="nav-link openSettingDiv" name="ollamaInfoDiv" href="#">Info</a>
                             </li>
                         </ul>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -82,11 +86,10 @@
                         <!-- Ollama Setting Start -->
                         <div class="container scrollDiv settingsContDiv" id="ollamaSettingsDiv">
                             <h4 id="ollamaSettingsDiv">Modal Settings</h4>
-                            <div class="mb-2 row">
-                                <div class="row">
-                                    <label for="settingsType" class="col-sm-2 col-form-label">Settings Type</label>
-                                    <div class="col-sm-10 d-flex align-items-center">
-                                        <div class="form-check col-sm-2">
+                                <div class="mb-2 row">
+                                    <label for="settingsType" class="col-sm-3 col-form-label">Settings Type</label>
+                                    <div class="d-flex align-items-center">
+                                        <div class="form-check col-sm-3">
                                             <input class="form-check-input settingsType ollamaSettings" type="radio"
                                                 name="settingsType" value="basic">
                                             <label class="form-check-label mx-1" for="basicSettings">
@@ -102,11 +105,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             <!-- Advance settings -->
                             <div class="row" id="advanceSettings">
                                 <div class="mb-2 row">
-                                    <label for="requestProtocol" class="col-sm-2 col-form-label">Protocol</label>
+                                    <label for="requestProtocol" class="col-sm-3 col-form-label">Protocol</label>
                                     <div class="col-sm-10 d-flex align-items-center">
                                         <div class="form-check col-sm-2">
                                             <input class="form-check-input ollamaSettings requestProtocol" type="radio"
@@ -125,15 +127,15 @@
                                     </div>
                                 </div>
                                 <div class="mb-2 row">
-                                    <label for="hostName" class="col-sm-2 col-form-label">Hostname</label>
-                                    <div class="col-sm-10">
+                                    <label for="hostName" class="col-sm-3 col-form-label">Hostname</label>
+                                    <div class="col-sm-9">
                                         <input type="text" class="form-control w-50 ollamaSettings"
                                             placeholder="localhost" id="hostName" value="localhost">
                                     </div>
                                 </div>
                                 <div class="mb-2 row">
-                                    <label for="ollamaPort" class="col-sm-2 col-form-label">Port</label>
-                                    <div class="col-sm-10">
+                                    <label for="ollamaPort" class="col-sm-3 col-form-label">Port</label>
+                                    <div class="col-sm-9">
                                         <input type="Port" value="11434" class="form-control w-50 ollamaSettings"
                                             placeholder="11434" id="ollamaPort">
                                     </div>
@@ -143,9 +145,9 @@
 
                             <!-- Basic Settings  -->
                             <div class="mb-2 row" id="basicSettings" hidden>
-                                <div class="mb-2 row">
-                                    <label for="modalUri" class="col-sm-2 col-form-label">Uri</label>
-                                    <div class="col-sm-10">
+                                <div class="row">
+                                    <label for="modalUri" class="col-sm-3 col-form-label">Uri</label>
+                                    <div class="col-sm-9">
                                         <input type="text" id="modalConnectionUri" name="modalConnectionUri"
                                             class="form-control w-50 ollamaSettings"
                                             placeholder="Please enter value like http://localhost:11434" id="hostName"
@@ -158,23 +160,40 @@
                             <div class="mb-2 row">
                                 <!-- Modal List -->
                                 <div class="mb-2 row">
-                                    <label for="modalList" class="col-sm-2 col-form-label">Modal List</label>
-                                    <div class="col-sm-10">
+                                    <label class="col-sm-3 col-form-label">Modal List</label>
+                                    <div class="col-sm-9">
                                         <select class="form-select w-50 ollamaSettings"
                                             aria-label="Default select example" id="modalList">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="mb-2 row">
-                                    <label for="useEmogi" class="col-sm-2 col-form-label">Use Emoji</label>
-                                    <div class="col-sm-10">
+                                    <label class="col-sm-3 col-form-label">Remember Chat</label>
+                                    <div class="col-sm-9 d-flex align-items-center">
+                                        <select class="form-select w-50 ollamaSettings" aria-label="Default select example" id="chatHistory">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                       <span title="Note this can effect the answer speed given by Ai.">
+                                        <svg xmlns="http://www.w3.org/2000/svg"  width="22" height="22"  fill="currentColor" class="bi bi-info-circle-fill reactSvg mx-1" viewBox="0 0 16 16">
+                                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
+                                        </svg>
+                                       </span>
+                                    </div>
+                                </div>
+                                <div class="mb-2 row">
+                                    <label class="col-sm-3 col-form-label">Use Emoji</label>
+                                    <div class="col-sm-9">
                                         <input class="form-check-input ollamaSettings" style="margin-top: 13px;"
                                             type="checkbox" id="useEmogi" value="" aria-label="...">
                                     </div>
                                 </div>
                                 <div class="mb-2 row">
-                                    <label for="resetSettings" class="col-sm-2 col-form-label">Reset Settings</label>
-                                    <div class="col-sm-10">
+                                    <label class="col-sm-3 col-form-label">Reset Settings</label>
+                                    <div class="col-sm-9">
                                         <button type="button" title="Click here to reset settings"
                                             class="customBtn-sm customBtn-danger button--neumorphic" id="resetSettings">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
@@ -228,6 +247,48 @@
                             </div>
                         </div>
                         <!-- Ollama Modal Downlod End -->
+
+                        <!-- Ollama Create Modal Start -->
+                        <div class="container scrollDiv settingsContDiv" id="ollamaCreateModalDiv" hidden>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h4>Custom Modal</h4>
+                                </div>
+                                <div class="col-md-9"><span class="coustomMessage" id="downloadMessage"></span></div>
+                            </div>
+                            <div class="bd-example mt-2">
+                                <div class="mb-2 row">
+                                    <div class="mb-2 row">
+                                        <label class="col-sm-3 col-form-label">Modal Name</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control w-50" id="customModalName" placeholder="Enter Name">
+                                        </div>
+                                    </div>
+                                    <div class="mb-2 row">
+                                        <label class="col-sm-3 col-form-label">Modal List</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-select w-50"
+                                                aria-label="Default select example" id="presentModalList">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mb-2 row">
+                                        <label class="col-sm-3 col-form-label">Enter Instructions</label>
+                                        <div class="col-sm-6">
+                                            <textarea id="modalInstruction" class="form-control" placeholder="Enter the instrucation for modal like : Act as Ben Tennyson Carton Charecter"></textarea>
+                                        </div>
+                                    </div>
+                                    <p id="showCreateMessage" class="text-danger mx-2" hidden>Hii</p>
+                                    <div class="mb-2 row mt-3">
+                                        <div>
+                                            <button id="createModal" class="customBtn customBtn-primary button--neumorphic" title="Click here to submit question">Create Modal</button>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Ollama Create Modal End -->
 
                         <!-- Ollama Downlod Start -->
                         <div class="container scrollDiv settingsContDiv" id="ollamaDownloadDiv" hidden>
@@ -570,10 +631,10 @@
                     </div>
                 </div>
                 <!-- Query Buttons -->
-                <div class="buttonSec my-3 container" style="position: absolute !important;bottom: 10px !important;">
+                <div class="buttongGroupDiv my-3 container">
                     <div class="row">
                         <div class="col-md-11">
-                            <div class="input-group" style="border: 1px solid !important;border-radius: 5px !important;">
+                            <div class="input-group">
                                 <span class="input-group-text" id="basic-addon1">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-robot" viewBox="0 0 16 16">
@@ -585,7 +646,7 @@
                                         </path>
                                     </svg>
                                 </span>
-                                <textarea type="text" id="userInput" style="border-left: 1px solid !important;" rows="1" class="form-control"
+                                <textarea type="text" id="userInput" rows="1" class="form-control"
                                     placeholder="Type your question..." aria-label="Input group example"
                                     aria-describedby="basic-addon1"></textarea>
                             </div>
