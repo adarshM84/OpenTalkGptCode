@@ -38,10 +38,12 @@ body {
     cursor: pointer;
     filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.5));
 }
-td span{
+
+td span {
     text-wrap: auto !important;
 }
-.featureSvg{
+
+.featureSvg {
     height: 40px !important;
     width: 65px !important;
     background: #ffcedb !important;
@@ -187,6 +189,12 @@ code {
     border-radius: 10px; */
 }
 
+input:focus,textarea:focus,select:focus,
+button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
 .responseSvg {
     position: relative;
     bottom: 14px;
@@ -243,10 +251,12 @@ code {
     outline: 3px solid rgba(253, 99, 47, 0.5);
     outline-offset: 2px;
 }
-.activeTab{
+
+.activeTab {
     color: black !important;
     font-weight: bold !important;
 }
+
 .downloadSvg {
     height: 125px !important;
     border-radius: 10px !important;
@@ -266,7 +276,8 @@ code {
 .button--neumorphic:hover {
     box-shadow: inset 5px 5px 10px #b0c4de, inset -5px -5px 10px #ffffff;
 }
-.botRole{
+
+.botRole {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -311,19 +322,23 @@ a {
 }
 
 /* card hover effect */
-.downloadCard{
+.downloadCard {
     background: transparent !important;
 }
-.downloadCard .card-header{
+
+.downloadCard .card-header {
     background: black !important;
     color: white !important;
 }
-.currentOsDiv{
+
+.currentOsDiv {
     animation: float 2s linear infinite;
 }
-.currentOsDiv .card-body{
+
+.currentOsDiv .card-body {
     background: aliceblue !important;
 }
+
 .card {
     text-decoration: none;
     border: 1px solid rgb(255, 255, 255);
@@ -352,9 +367,24 @@ a {
 .card:hover:before {
     left: 100%;
 }
+
 .blinking-text {
     animation: blink 3s infinite;
-  }
+}
+
+.buttongGroupDiv {
+    position: absolute !important;
+    bottom: 15px !important;
+}
+
+.buttongGroupDiv .row .col-md-11 div {
+    border: 1px solid !important;
+    border-radius: 5px !important;
+}
+
+.userInput {
+    border-left: 1px solid !important;
+}
 
 /* card hover effect End*/
 
@@ -367,15 +397,17 @@ a {
 
 @keyframes blink {
     0% {
-      opacity: 1;
+        opacity: 1;
     }
+
     50% {
-      opacity: 0;
+        opacity: 0;
     }
+
     100% {
-      opacity: 1;
+        opacity: 1;
     }
-  }
+}
 
 @keyframes float {
     0% {
