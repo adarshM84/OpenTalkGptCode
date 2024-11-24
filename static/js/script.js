@@ -4,6 +4,11 @@ const textarea = document.getElementById('userInput');
 textarea.addEventListener('input', function () {
     this.style.height = 'auto';  // Reset height
     this.style.height = (this.scrollHeight <= 60 ? this.scrollHeight : 60) + 'px'; // Set height based on content or max-height
+    //To Resize After Question End
+    if (this.classList.contains("questionEnd")) {
+        this.classList.remove("questionEnd");
+        this.style.height = "0px";
+    }
 });
 
 var rebuildRules = undefined;
@@ -34,13 +39,10 @@ if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.id) {
 
 //On Load Settings
 window.onload = () => {
-    localStorage.setItem("isDownloaing", "false")
-    if (localStorage.getItem("ollamaPort") == null || localStorage.getItem("ollamaPort").length == 0) localStorage.setItem("ollamaPort", "11434");
-    if (localStorage.getItem("hostAddress") == null || localStorage.getItem("hostAddress").length == 0) localStorage.setItem("hostAddress", "localhost");
-    if (localStorage.getItem("requestProtocol") == null || localStorage.getItem("requestProtocol").length == 0) localStorage.setItem("requestProtocol", "http");
-    if (localStorage.getItem("settingsType") == null || localStorage.getItem("settingsType").length == 0) localStorage.setItem("settingsType", "basic");
-    if (localStorage.getItem("useEmoji") == null || localStorage.getItem("useEmoji").length == 0) localStorage.setItem("useEmoji", "false");
-    if (localStorage.getItem("modalConnectionUri") == null || localStorage.getItem("modalConnectionUri").length == 0) localStorage.setItem("modalConnectionUri", "http://localhost:11434");
+    localStorage.setItem("isDownloaing", "false");
+    localStorage.setItem("stopChat", "false");
+    localStorage.setItem("chatInProcess", "false");
+    initializeLocalStorageDefaults();
 
     if (localStorage.getItem("ollamaModal") && localStorage.getItem("ollamaModal") !== null && localStorage.getItem("ollamaModal").length != 0) {
         document.getElementById("modalInfo").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-check" viewBox="0 0 16 16">
@@ -79,6 +81,22 @@ function setHostAddress(hostName) {
     else if (hostName.length > 0) rebuildRules(hostName);
 }
 
+function setDefault(key, defaultValue) {
+    if (!localStorage.getItem(key) || localStorage.getItem(key).length === 0) {
+        localStorage.setItem(key, defaultValue);
+    }
+}
+
+function initializeLocalStorageDefaults() {
+    setDefault("ollamaPort", "11434");
+    setDefault("hostAddress", "localhost");
+    setDefault("requestProtocol", "http");
+    setDefault("settingsType", "basic");
+    setDefault("useEmoji", "false");
+    setDefault("modalConnectionUri", "http://localhost:11434");
+    setDefault("remTotalChat", "1");
+}
+
 function setButtonFunctionCalls() {
 
     document.getElementById("setCustomBotRole").addEventListener("click", function (event) {
@@ -92,11 +110,14 @@ function setButtonFunctionCalls() {
             getQAnswer();
         }
     });
-    
+
     document.getElementById("stopChat").addEventListener("click", function (event) {
         localStorage.setItem("stopChat", "true");
     })
 
+    document.getElementById("createModal").addEventListener("click", function (event) {
+        createModal();
+    })
     document.getElementById("opneIntroIcon").addEventListener("click", function (event) {
         openModal('openModalBtn')
     });
@@ -188,7 +209,7 @@ function setSettings(event) {
         } else {
             localStorage.setItem("settingsType", "basic");
         }
-    } else if (event.target.type == "select-one") {
+    } else if (event.target.type == "select-one" && event.target.id == "modalList") {
         if (event.target.value.trim().length == 0) {
             alert("Please select modal");
             return;
@@ -198,6 +219,8 @@ function setSettings(event) {
   <path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/>
   <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
 </svg> `+ localStorage.getItem("ollamaModal");
+    } else if (event.target.type == "select-one" && event.target.id == "chatHistory") {
+        localStorage.setItem("remTotalChat", event.target.value);
     }
     setModalSettingsList();
 }
@@ -239,7 +262,7 @@ function showOsWiseDownload(selectedDivId, isDefaut) {
         } else {
             showElement("linuxDownloadDivBtn", false);
             showElement("ollamaDownloadBtnDiv", true);
-           
+
             if (selectedDivId == "macDownloadDiv") {
                 downloadLink = "https://ollama.com/download/Ollama-darwin.zip";
                 downloadNotes = "Requires macOS 11 Big Sur or later";
@@ -253,7 +276,11 @@ function showOsWiseDownload(selectedDivId, isDefaut) {
 
 //Bot response
 function getQAnswer(isRoleSet) {
-    localStorage.setItem("stopChat", "false");
+    if (localStorage.getItem("chatInProcess") == "true") {
+        alert("Chat is in process.Please stop the chat or wait till it complete.");
+        return;
+    }
+    localStorage.setItem("chatInProcess", "true");
     if (localStorage.getItem("qId") == 'NaN' || !localStorage.getItem("qId")) {
         localStorage.setItem("qId", 1)
     }
@@ -326,6 +353,7 @@ function getQAnswer(isRoleSet) {
                 if (localStorage.getItem("stopChat") == "true") {
                     showElement("askQuestion", true);
                     showElement("stopChat", false);
+                    localStorage.setItem("chatInProcess", "false");
                     console.log("Chat stopped by user.");
                     return; // Stop further execution if stopDownload is true
                 }
@@ -379,9 +407,12 @@ function getQAnswer(isRoleSet) {
                         showElement("askQuestion", true);
                         showElement("stopChat", false);
                         scrollDown("chat");
-                        chatHistory.push({ role: "assistant", content: document.getElementById("botResponseDiv" + localStorage.getItem("qId")).textContent });//Add For Chat History
-                        //It will remember last 2 chat
-                        if (chatHistory.length == 6) {
+                        localStorage.setItem("chatInProcess", "false");
+                        var tmpBotAnswer = document.getElementById("botResponseDiv" + localStorage.getItem("qId")).textContent;
+                        chatHistory.push({ role: "assistant", content: tmpBotAnswer });//Add For Chat History
+
+                        //It will remember last chat set by user
+                        if (chatHistory.length == ((2 * localStorage.getItem("remTotalChat") + 2))) {
                             chatHistory.splice(0, 2);
                         }
                         showElement("welcomeDiv", false);
@@ -406,11 +437,13 @@ function getQAnswer(isRoleSet) {
             showElement("askQuestion", true);
             showElement("stopChat", false);
             localStorage.setItem("stopChat", "false");
+            localStorage.setItem("chatInProcess", "false");
             console.error('There was a problem with the fetch operation:', error);
         });
 
     // Clear the input field
     document.getElementById('userInput').value = '';
+    document.getElementById('userInput').classList.add("questionEnd");
 };
 
 //Set Bot Prompt
@@ -428,4 +461,152 @@ function setRole(event, isCoustom = false, inputId = "") {
     localStorage.setItem("botDesc", botRole);
     document.getElementById('userInput').value = botRole;
     getQAnswer(true);
+}
+
+//Create Modal
+function createModal() {
+    var customModalName = document.getElementById("customModalName").value.trim();
+    var selectedModal = document.getElementById("presentModalList").value.trim();
+    var modalInstruction = document.getElementById("modalInstruction").value.trim();
+
+    if (document.getElementById("showCreateMessage").classList.contains("text-success")) document.getElementById("showCreateMessage").classList.remove("text-success");
+    document.getElementById("showCreateMessage").classList.add("text-danger");
+
+    if (customModalName.length == 0) {
+        document.getElementById("showCreateMessage").innerHTML = "<b>Please Enter Valid Name.</b>";
+        showElement("showCreateMessage", true);
+        setTimeout(() => { showElement("showCreateMessage", false); }, 7000);
+        return false;
+    }
+    if (selectedModal.length == 0) {
+        document.getElementById("showCreateMessage").innerHTML = "<b>Please Select Modal.</b>";
+        showElement("showCreateMessage", true);
+        setTimeout(() => { showElement("showCreateMessage", false); }, 7000);
+        return false;
+    }
+    if (modalInstruction.length == 0) {
+        document.getElementById("showCreateMessage").innerHTML = "<b>Please Enter Valid Modal Instruction.</b>";
+        showElement("showCreateMessage", true);
+        setTimeout(() => { showElement("showCreateMessage", false); }, 7000);
+        return false;
+    }
+
+    var modelfile = "FROM "+selectedModal+"\nSYSTEM "+modalInstruction;
+    console.log(customModalName,modelfile)
+
+    // curl http://localhost:11434/api/create -d '{
+    //     "model": "ben10",
+    //     "modelfile": "FROM llama3.2:1b\nSYSTEM Act as ben tenyson"
+    //   }'
+
+    if (localStorage.getItem("ModalWorking") && localStorage.getItem("ModalWorking") == "1") {
+        const data = {
+            model: customModalName,
+            modelfile: modelfile
+        };
+
+        var apiUrl = "http://localhost:11434";
+        apiUrl = `${localStorage.getItem("requestProtocol")}://${localStorage.getItem("hostAddress")}:${localStorage.getItem("ollamaPort")}/api/create`;
+        if (localStorage.getItem("settingsType") == "basic") apiUrl = localStorage.getItem("modalConnectionUri") + "/api/create";
+        // Act as ben tenyson and talk in hindi only
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                console.log(response, "response");
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.body.getReader();
+            })
+            .then(reader => {
+                let decoder = new TextDecoder();
+                let buffer = ''; // Buffer to store incomplete JSON strings
+
+                // Define recursive function to continuously fetch responses
+                function readStream() {
+
+                    reader.read().then(({ done, value }) => {
+                        if (done) {
+                            // Process any remaining buffer at the end of stream
+                            if (buffer !== '') {
+                                processJSON(buffer);
+                            }
+                            return;
+                        }
+
+                        // Append the new chunk of data to the buffer
+                        buffer += decoder.decode(value, { stream: true });
+
+                        // Process complete JSON objects in the buffer
+                        processBuffer();
+
+                        // Continue reading the stream if not done
+                        readStream();
+                    });
+                }
+
+                // Function to process the buffer and extract complete JSON objects
+                function processBuffer() {
+                    let chunks = buffer.split('\n');
+                    buffer = '';
+
+                    // Process each chunk
+                    for (let i = 0; i < chunks.length - 1; i++) {
+                        let chunk = chunks[i];
+                        processJSON(chunk);
+                    }
+
+                    // Store the incomplete JSON for the next iteration
+                    buffer = chunks[chunks.length - 1];
+                }
+
+                // Function to parse and process a JSON object
+                function processJSON(jsonString) {
+                    try {
+                        let jsonData = JSON.parse(jsonString);
+                        var showCreateMessage = document.getElementById("showCreateMessage");
+                        showElement("showCreateMessage", true);
+
+                        if (jsonData.error) {
+                            showCreateMessage.innerHTML = "Not able to download please check internet connection on ollama server and check console for more info.";
+                            console.log(jsonData.error);
+                            return;
+                        }
+                        if (document.getElementById("showCreateMessage").classList.contains("text-danger")) document.getElementById("showCreateMessage").classList.remove("text-danger");
+                        document.getElementById("showCreateMessage").classList.add("text-success");
+
+                        document.getElementById("showCreateMessage").innerHTML = `<b>${jsonData.status}</b>`;
+                        setTimeout(() => { showElement("showCreateMessage", false); }, 7000);
+
+                        // Check if the response indicates "done: true"
+                        if (jsonData.status && jsonData.status == "success") {
+                            alert("Modal Creation Completed.");
+                            document.getElementById("customModalName").value="";
+                            document.getElementById("presentModalList")[0].selected=true;
+                            document.getElementById("modalInstruction").value="";
+
+                            setModalSettingsList();//Load Latest Data
+                        }
+                    } catch (error) {
+                        console.error('Error parsing JSON:', error);
+                    }
+                }
+
+                // Start reading the stream
+                readStream();
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                alert('Error:', error); // Display error if any
+            });
+
+    } else {
+        alert("Opps ollama modal is not running please check.");
+    }
+
 }

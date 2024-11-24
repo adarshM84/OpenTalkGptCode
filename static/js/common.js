@@ -113,7 +113,7 @@ function addMessage(userQ, botAn, msgType, ansDivNo = parseInt(localStorage.getI
 
 //Copy Response
 function copyResponse(divId, copied = false) {
-    if(!divId && divId.trim().length ==0 ){
+    if (!divId && divId.trim().length == 0) {
         return;
     }
     if (divId.includes("copy")) divId = divId.substr(4);
@@ -261,7 +261,7 @@ function loadModalTableData(modalInfo) {
         tmpThDownload.classList.add("backgroundLightWhite", "d-flex", "align-items-center");
 
         var tmpSpanMessage = document.createElement("span");
-        tmpSpanMessage.classList.add("badge", "text-black","text-break");
+        tmpSpanMessage.classList.add("badge", "text-black", "text-break");
         tmpSpanMessage.classList.add(modalInfo[i].downloaded ? ("customBtn-primary") : ("customBtn-danger"));
         tmpSpanMessage.id = "downloadStatus" + (i + 1)
         tmpSpanMessage.innerHTML = modalInfo[i].downloaded ? "DOWNLOADED" : "PENDING";
@@ -336,8 +336,8 @@ function downloadModalOnline(modalDownloadRowId) {
             .then(reader => {
                 let decoder = new TextDecoder();
                 let buffer = ''; // Buffer to store incomplete JSON strings
-                let noOfLayes=1;
-                let tmpDigest="";
+                let noOfLayes = 1;
+                let tmpDigest = "";
 
                 // Define recursive function to continuously fetch responses
                 function readStream() {
@@ -390,15 +390,15 @@ function downloadModalOnline(modalDownloadRowId) {
                         if (jsonData.total && jsonData.completed) {
                             downloadPercent = (jsonData.completed / jsonData.total) * 100;
                         }
-                        if(jsonData.error){
-                            tmpDownloadStatusSpan.innerHTML="Not able to download please check internet connection on ollama server and check console for more info.";
+                        if (jsonData.error) {
+                            tmpDownloadStatusSpan.innerHTML = "Not able to download please check internet connection on ollama server and check console for more info.";
                             console.log(jsonData.error);
                             return;
                         }
-                        if(jsonData.digest && jsonData.digest.length>2){
-                            if(jsonData.digest != tmpDigest){
-                                if(tmpDigest.length>0) noOfLayes++;
-                                tmpDigest=jsonData.digest;
+                        if (jsonData.digest && jsonData.digest.length > 2) {
+                            if (jsonData.digest != tmpDigest) {
+                                if (tmpDigest.length > 0) noOfLayes++;
+                                tmpDigest = jsonData.digest;
                             }
                         }
 
@@ -423,6 +423,8 @@ function downloadModalOnline(modalDownloadRowId) {
                 alert('Error:', error); // Display error if any
             });
 
+    }else{
+        alert("Opps ollama modal is not running please check.")
     }
 }
 
@@ -529,6 +531,8 @@ function setModalSettingsList() {
     var requestProtocol = localStorage.getItem("requestProtocol");
     var ollamaPort = localStorage.getItem("ollamaPort");
     var useEmoji = localStorage.getItem("useEmoji") == "true" ? true : false;
+    var remTotalChat = localStorage.getItem("remTotalChat");
+
     if (localStorage.getItem("settingsType") == "basic") {
         document.getElementById("modalConnectionUri").value = localStorage.getItem("modalConnectionUri");
     }
@@ -536,6 +540,7 @@ function setModalSettingsList() {
     document.getElementById("useEmogi").checked = useEmoji;
     document.getElementById("ollamaPort").value = ollamaPort;
     document.getElementById("hostName").value = hostAddress;
+    document.getElementById("chatHistory")[remTotalChat - 1].selected = true;
 
     if (localStorage.getItem("requestProtocol") == "http") {
         document.getElementsByClassName("requestProtocol")[0].checked = true;
@@ -567,22 +572,24 @@ function setModalSettingsList() {
             // console.log(data.models);
             var modelsList = data.models;
             var modelSelect = document.getElementById("modalList");
-            modelSelect.innerHTML = "";
-            modelSelect.innerHTML = "<option disabled selected>Select Modal</option>";
+            var downloadedList = document.getElementById("presentModalList");
+            downloadedList.innerHTML = modelSelect.innerHTML = "";
+            downloadedList.innerHTML = modelSelect.innerHTML = "<option disabled selected>Select Modal</option>";
+
             for (i = 0; i < modelsList.length; i++) {
                 var tmpOption = document.createElement("option");
                 tmpOption.value = modelsList[i].name;
                 tmpOption.innerHTML = modelsList[i].name + " " + modelsList[i].details.parameter_size;
 
                 var selectedModal = localStorage.getItem("ollamaModal");
-                // if (!selectedModal || selectedModal == "null" || selectedModal.length == 0) {
-                //     tmpOption.selected = true;
-                // }
+
                 if (selectedModal == modelsList[i].name) {
                     tmpOption.selected = true;
                 }
 
-                modelSelect.appendChild(tmpOption)
+                var tmpOptionClone = tmpOption.cloneNode(true);
+                downloadedList.appendChild(tmpOptionClone);
+                modelSelect.appendChild(tmpOption);
             }
             setMessage("settingsMessage", "<img class='customIcon' src='static/images/verify.gif' />Modal loaded successfully", 0);
             setMessage("downloadMessage", "<img class='customIcon' src='static/images/verify.gif' />Modal loaded successfully", 0);
