@@ -39,9 +39,6 @@ if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.id) {
 
 //On Load Settings
 window.onload = () => {
-    localStorage.setItem("isDownloaing", "false");
-    localStorage.setItem("stopChat", "false");
-    localStorage.setItem("chatInProcess", "false");
     initializeLocalStorageDefaults();
 
     if (localStorage.getItem("ollamaModal") && localStorage.getItem("ollamaModal") !== null && localStorage.getItem("ollamaModal").length != 0) {
@@ -81,13 +78,17 @@ function setHostAddress(hostName) {
     else if (hostName.length > 0) rebuildRules(hostName);
 }
 
-function setDefault(key, defaultValue) {
-    if (!localStorage.getItem(key) || localStorage.getItem(key).length === 0) {
+function setDefault(key, defaultValue,setForce=false) {
+    if (!localStorage.getItem(key) || localStorage.getItem(key).length === 0 || setForce) {
         localStorage.setItem(key, defaultValue);
     }
 }
 
 function initializeLocalStorageDefaults() {
+    setDefault("parseContent", "true");
+    setDefault("isDownloaing", "false",true);
+    setDefault("stopChat", "false",true);
+    setDefault("chatInProcess", "false",true);
     setDefault("ollamaPort", "11434");
     setDefault("hostAddress", "localhost");
     setDefault("requestProtocol", "http");
@@ -162,8 +163,10 @@ function setButtonFunctionCalls() {
 //Set Settings On Changes
 function setSettings(event) {
     // console.log(event.target.name, event.target.type)
-    if (event.target.type == "checkbox") {
+    if (event.target.type == "checkbox" && event.target.id == "useEmogi") {
         localStorage.setItem("useEmoji", event.target.checked);
+    } else if (event.target.type == "checkbox" && event.target.id == "parseContent") {
+        localStorage.setItem("parseContent", event.target.checked);
     } else if (event.target.type == "text" && event.target.id == "hostName") {
         if (event.target.value.trim().length == 0) {
             alert("Please enter valid host name");
@@ -280,7 +283,6 @@ function getQAnswer(isRoleSet) {
         alert("Chat is in process.Please stop the chat or wait till it complete.");
         return;
     }
-    localStorage.setItem("chatInProcess", "true");
     if (localStorage.getItem("qId") == 'NaN' || !localStorage.getItem("qId")) {
         localStorage.setItem("qId", 1)
     }
@@ -318,7 +320,7 @@ function getQAnswer(isRoleSet) {
     }
 
     chatHistory.push({ role: "user", content: userQuery });//Add For Chat History
-    // console.log("History", chatHistory)
+    localStorage.setItem("chatInProcess", "true");
     scrollDown("chat");
 
     var ollamaModal = localStorage.getItem("ollamaModal") ? localStorage.getItem("ollamaModal") : "llama3.2";
@@ -467,7 +469,9 @@ function setRole(event, isCoustom = false, inputId = "") {
 function createModal() {
     var customModalName = document.getElementById("customModalName").value.trim();
     var selectedModal = document.getElementById("presentModalList").value.trim();
-    var modalInstruction = document.getElementById("modalInstruction").value.trim();
+    var modalInstruction = document.getElementById("modalInstruction").value.trim().replace("\n", "");
+    var isValidName = validateString(customModalName, "modalName");
+    var isValidInstruction = validateString(customModalName, "modalInstruction");
 
     if (document.getElementById("showCreateMessage").classList.contains("text-success")) document.getElementById("showCreateMessage").classList.remove("text-success");
     document.getElementById("showCreateMessage").classList.add("text-danger");
@@ -475,24 +479,32 @@ function createModal() {
     if (customModalName.length == 0) {
         document.getElementById("showCreateMessage").innerHTML = "<b>Please Enter Valid Name.</b>";
         showElement("showCreateMessage", true);
-        setTimeout(() => { showElement("showCreateMessage", false); }, 7000);
+        setTimeout(() => { showElement("showCreateMessage", false); }, 5000);
         return false;
-    }
-    if (selectedModal.length == 0) {
+    } else if (isValidName != true) {
+        document.getElementById("showCreateMessage").innerHTML = "Invalid modal name " + isValidName;
+        showElement("showCreateMessage", true);
+        setTimeout(() => { showElement("showCreateMessage", false); }, 5000);
+        return false;
+    } else if (selectedModal.length == 0) {
         document.getElementById("showCreateMessage").innerHTML = "<b>Please Select Modal.</b>";
         showElement("showCreateMessage", true);
-        setTimeout(() => { showElement("showCreateMessage", false); }, 7000);
+        setTimeout(() => { showElement("showCreateMessage", false); }, 5000);
         return false;
-    }
-    if (modalInstruction.length == 0) {
+    } else if (modalInstruction.length == 0) {
         document.getElementById("showCreateMessage").innerHTML = "<b>Please Enter Valid Modal Instruction.</b>";
         showElement("showCreateMessage", true);
-        setTimeout(() => { showElement("showCreateMessage", false); }, 7000);
+        setTimeout(() => { showElement("showCreateMessage", false); }, 5000);
+        return false;
+    } else if (isValidInstruction != true) {
+        document.getElementById("showCreateMessage").innerHTML = "Invalid instrucation " + isValidInstruction;
+        showElement("showCreateMessage", true);
+        setTimeout(() => { showElement("showCreateMessage", false); }, 5000);
         return false;
     }
 
-    var modelfile = "FROM "+selectedModal+"\nSYSTEM "+modalInstruction;
-    console.log(customModalName,modelfile)
+    var modelfile = "FROM " + selectedModal + "\nSYSTEM " + modalInstruction;
+    console.log(customModalName, modelfile)
 
     // curl http://localhost:11434/api/create -d '{
     //     "model": "ben10",
@@ -581,14 +593,14 @@ function createModal() {
                         document.getElementById("showCreateMessage").classList.add("text-success");
 
                         document.getElementById("showCreateMessage").innerHTML = `<b>${jsonData.status}</b>`;
-                        setTimeout(() => { showElement("showCreateMessage", false); }, 7000);
+                        setTimeout(() => { showElement("showCreateMessage", false); }, 5000);
 
                         // Check if the response indicates "done: true"
                         if (jsonData.status && jsonData.status == "success") {
                             alert("Modal Creation Completed.");
-                            document.getElementById("customModalName").value="";
-                            document.getElementById("presentModalList")[0].selected=true;
-                            document.getElementById("modalInstruction").value="";
+                            document.getElementById("customModalName").value = "";
+                            document.getElementById("presentModalList")[0].selected = true;
+                            document.getElementById("modalInstruction").value = "";
 
                             setModalSettingsList();//Load Latest Data
                         }

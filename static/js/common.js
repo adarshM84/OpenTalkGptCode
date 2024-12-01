@@ -22,8 +22,68 @@ var allDownloadModalList = [
     { name: "solar:latest", size: "6.1 GB", downloaded: false }
 ];
 
+
+function getCode(event) {
+    // console.log(event.currentTarget, event.currentTarget.getAttribute("name"))
+    window.navigator.clipboard.writeText(event.currentTarget.parentNode.getElementsByClassName("mainCodeContent")[0].textContent);
+    event.currentTarget.getElementsByTagName("svg")[0].setAttribute("style", "display:none");
+    event.currentTarget.getElementsByTagName("svg")[1].setAttribute("style", "display:initial");
+}
+
+function parseText(input) {
+    // Escape any HTML in the input to prevent parsing
+    const escapedInput = input
+        .replace(/&/g, "&amp;") // Escape `&`
+        .replace(/</g, "&lt;") // Escape `<`
+        .replace(/>/g, "&gt;"); // Escape `>`
+
+    // Replace **text** with <b>text</b> while preserving escaped content
+    let formatted = escapedInput.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+
+    // Map of language types to their code block styles and badges
+    const languageStyles = {
+        html: { className: "htmlCode", label: "HTML" },
+        css: { className: "cssCode", label: "CSS" },
+        javascript: { className: "jsCode", label: "JS" },
+        php: { className: "phpCode", label: "PHP" },
+        cpp: { className: "cppCode", label: "cpp" },
+        general: { className: "generalCode", label: "Code" }
+    };
+
+    // Function to wrap the code block
+    function wrapCodeBlock(lang, code) {
+        const { className, label } = languageStyles[lang] || languageStyles.general;
+        var preparedContents = `
+                <div class="${className} customCodeBlock">
+                    <p class="codeBage" title="Copy Response"><span>${label}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="20" fill="currentColor" class="bi bi-clipboard2-fill reactSvg copyResponse mx-1" viewBox="0 0 16 16" id="copy67">
+                            <path id="67" d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5z"></path>
+                            <path id="67" d="M3.5 1h.585A1.5 1.5 0 0 0 4 1.5V2a1.5 1.5 0 0 0 1.5 1.5h5A1.5 1.5 0 0 0 12 2v-.5q-.001-.264-.085-.5h.585A1.5 1.5 0 0 1 14 2.5v12a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-12A1.5 1.5 0 0 1 3.5 1"></path>
+                        </svg>
+                        <svg style="display:none;" xmlns="http://www.w3.org/2000/svg" width="15" height="20" fill="currentColor" class="bi bi-clipboard-check-fill reactSvg" viewBox="0 0 16 16"><path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z"></path><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708"></path><title>Copied</title></svg>
+                    </p>
+                    <span class="mainCodeContent">${code}</span>
+                </div>`;
+        return preparedContents;
+    }
+
+
+    // Detect and format code blocks with triple backticks
+    formatted = formatted.replace(/```(html|css|javascript|php|cpp|)(.*?)```/gs, (match, lang, code) => {
+        lang = lang || "general"; // Default to 'general' if no language is specified
+        return wrapCodeBlock(lang, code);
+    });
+    return formatted;
+}
+
 function typeWriter() {
-    document.getElementById("botResponse" + parseInt(localStorage.getItem("qId"))).textContent = botMessage;
+    var parentDivId = "botResponse" + parseInt(localStorage.getItem("qId"));
+    if(localStorage.getItem("parseContent") == "true"){
+        document.getElementById(parentDivId).innerHTML = (localStorage.getItem("parseContent") == "true") ? parseText(botMessage) : botMessage;
+        setFunctionCallByClass("codeBage", "click", getCode);
+    }else{
+        document.getElementById(parentDivId).innerHTML = botMessage;
+    }
 }
 
 function getOsType() {
@@ -34,11 +94,6 @@ function getOsType() {
     if (platform.includes('iphone') || platform.includes('ipad')) return 'iOS';
     if (platform.includes('android')) return 'Android';
     return 'Unknown';
-}
-
-function convertBackticksToCodeBlock(text) {
-    return text
-        .replace(/```sql([\s\S]*?)```/g, '<code class="align-middle">$1</code>'); // Handles multiline code blocks
 }
 
 function checkTime(i) {
@@ -82,6 +137,7 @@ function addMessage(userQ, botAn, msgType, ansDivNo = parseInt(localStorage.getI
 
         var botAnEl = document.createElement("p");
         botAnEl.id = "botResponse" + parseInt(localStorage.getItem("qId"));
+        botAnEl.className="botResponseContent";
         botAnEl.setAttribute("style", "width:100% !important;")
         // botAnEl.innerHTML = '<span class="mt-1 coustomSpinner">Loading</span> <span class="spinner-grow spinner-grow-sm mt-2" role="status" aria-hidden="true"></span><span class="spinner-grow spinner-grow-sm mt-2" role="status" aria-hidden="true"></span><span class="spinner-grow spinner-grow-sm mt-2" role="status" aria-hidden="true"></span>';
         botAnEl.innerHTML = '<p class="card-text placeholder-glow coustomSpinner"> <span class="placeholder col-7"></span> <span class="placeholder col-4"></span> <span class="placeholder col-4"></span> <span class="placeholder col-6"></span> <span class="placeholder col-8"></span> </p> </div> ';
@@ -105,7 +161,7 @@ function addMessage(userQ, botAn, msgType, ansDivNo = parseInt(localStorage.getI
             botMessage = "";
         }
         botMessage += botAn;
-        document.getElementById("botResponse" + ansDivNo).setAttribute("style", "white-space: pre-line;");
+        document.getElementById("botResponse" + ansDivNo).setAttribute("style", "white-space: pre-line;width:100% !important;");
         typeWriter("chat");
     }
     // scrollDown("chat"); This may be annoying to show scroll every time
@@ -138,6 +194,20 @@ function copyResponse(divId, copied = false) {
 
 function showElement(elementId, flag) {
     document.getElementById(elementId).hidden = !flag;
+}
+
+function validateString(input, strinType) {
+    var validPattern = /^[a-zA-Z0-9 ,]*$/; // Pattern allowing only letters, numbers, spaces, and commas
+    if (strinType == "modalName") {
+        validPattern = /^[a-zA-Z0-9]*$/; // Pattern for modalName: Only letters and numbers
+    }
+    // Now use the actual input string for validation
+    if (!validPattern.test(input)) {
+        return (strinType == "modalName"
+            ? "Only letters and numbers are allowed."
+            : "Only letters, numbers, spaces, and commas are allowed.");
+    }
+    return true;
 }
 
 
@@ -409,6 +479,7 @@ function downloadModalOnline(modalDownloadRowId) {
                             alert("Download Complete");
                             localStorage.setItem("isDownloaing", "false")
                             setModalSettingsList();//Load Latest Data
+                            window.location.reload();
                         }
                     } catch (error) {
                         console.error('Error parsing JSON:', error);
@@ -423,7 +494,7 @@ function downloadModalOnline(modalDownloadRowId) {
                 alert('Error:', error); // Display error if any
             });
 
-    }else{
+    } else {
         alert("Opps ollama modal is not running please check.")
     }
 }
@@ -531,6 +602,7 @@ function setModalSettingsList() {
     var requestProtocol = localStorage.getItem("requestProtocol");
     var ollamaPort = localStorage.getItem("ollamaPort");
     var useEmoji = localStorage.getItem("useEmoji") == "true" ? true : false;
+    var parseContent = localStorage.getItem("parseContent") == "true" ? true : false;
     var remTotalChat = localStorage.getItem("remTotalChat");
 
     if (localStorage.getItem("settingsType") == "basic") {
@@ -538,6 +610,7 @@ function setModalSettingsList() {
     }
 
     document.getElementById("useEmogi").checked = useEmoji;
+    document.getElementById("parseContent").checked = parseContent;
     document.getElementById("ollamaPort").value = ollamaPort;
     document.getElementById("hostName").value = hostAddress;
     document.getElementById("chatHistory")[remTotalChat - 1].selected = true;
@@ -601,7 +674,7 @@ function setModalSettingsList() {
         .catch((error => {
             var modelSelect = document.getElementById("modalList");
             modelSelect.innerHTML = "";
-            setTimeout(function () { setMessage("settingsMessage", `<img class='customIcon' src='static/images/cross.gif' />Unable to connect to ollama.Please check server running or not through below url.<br><a target='_blank' href='${apiUrl}'>${apiUrl}<a><br><span class='text-success'> To install or make of ollama server click <a href='https://github.com/ollama/ollama/tree/main#user-content-ollama'>here</a></span>`, 1) }, 100);
+            setTimeout(function () { setMessage("settingsMessage", `<img class='customIcon' src='static/images/cross.gif' />Unable to connect to ollama.Please check server running or not through below url.<br><a target='_blank' href='${apiUrl}'>${apiUrl}<a><br><span class='text-success'> To install or make of ollama server click <a href='https://github.com/ollama/ollama/tree/main#user-content-ollama'>here</a> or download from Download Modal Section</span>`, 1) }, 100);
             setMessage("downloadMessage", "<img class='customIcon' src='static/images/cross.gif' />Not able to connect with modal.Please check in Modal Settings Section", 1);
             localStorage.setItem("ModalWorking", 0);
             showElement("modalErrorDiv", true);
