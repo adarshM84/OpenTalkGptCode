@@ -166,7 +166,61 @@ code {
     /* border: 1px solid rgba(0, 255, 12, 0.3);S */
 
 }
+.botResponseContent{
+    white-space: pre-line !important;
+    width:100% !important;
+}
 
+.customCodeBlock {
+    border-radius: 5px;
+    font-family: monospace;
+    white-space: pre-wrap;
+    padding: 5px 5px 5px 10px !important;
+    min-width: 98% !important;
+    max-width: 98% !important;
+    display: inline-table;
+    box-shadow: 5px 3px 3px 0px;
+}
+
+.htmlCode {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+}
+.phpCode{
+    background-color: #ecc2fa;
+    border: 1px solid #ccc;
+}
+.cppCode{
+    background-color: #fac2d3;
+    border: 1px solid #ccc;
+}
+
+.cssCode {
+    background-color: #d8f9ff;
+    border: 1px solid #ccc;
+}
+
+.codeBage {
+    font-family: monospace;
+    cursor: pointer;
+    background: black;
+    color: beige;
+    display: flex;
+    padding: 4px 10px;
+    float: inline-end;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.jsCode {
+    background-color: #d8eaff;
+    border: 1px solid #d8eaff;
+}
+
+.generalCode {
+    background-color: #d8fff5;
+    border: 1px solid #d8eaff;
+}
 
 .codeHead {
     white-space: pre-line !important;
@@ -183,13 +237,12 @@ code {
     white-space: normal !important;
     background: black;
     color: white;
-    padding: 2px 10px;
-    margin-top: 5px;
-    /* padding: 6px 16px 6px 16px;
-    border-radius: 10px; */
+    padding: 6px 16px 6px 16px;
+    border-radius: 10px;
+    display: inline-table;
 }
 
-input:focus,textarea:focus,select:focus,
+select:focus,
 button:focus {
     outline: none !important;
     box-shadow: none !important;
