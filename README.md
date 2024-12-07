@@ -6,9 +6,10 @@
 
 🎯 The extension offers complete flexibility to download, delete, and personalize models directly from the interface, making it a versatile tool for AI enthusiasts and developers alike.
 
+### Chrome Extention Link : <a href="https://chromewebstore.google.com/detail/opentalkgpt/idknomikbgopkhpepapoehhoafacddlk?authuser=0&hl=en-GB" target="_blank">OpenTalkGpt</a>
+
 # For more info check here
 - https://github.com/adarshM84/OpenTalkGpt
-- Download extention from here https://chromewebstore.google.com/detail/opentalkgpt/idknomikbgopkhpepapoehhoafacddlk?authuser=0&hl=en-GB
 
 
 ## Steps To Contribute On Project :
