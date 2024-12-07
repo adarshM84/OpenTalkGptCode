@@ -55,7 +55,7 @@
    - On the GitHub repository page, click **Fork** to create your copy of the repository.
    - Clone the forked repository to your local system:
      ```bash
-     git clone https://github.com/your-username/repository-name.git
+     git clone https://github.com/adarshM84/OpenTalkGptCode.git
      ```
 2. **Make Changes**:
    - Add your changes to the cloned repository.
