@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "OpenTalkGPT",
+  "description": "This extension hosts an ollama ui web server on localhost and other server and help you to manage modals.",
+  "version": "1.6.1",
+  "action": {},
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess"
+  ],
+  "host_permissions": [
+    "http://*:*/*",
+    "https://*:*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png"
+  }
+}
