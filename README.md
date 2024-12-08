@@ -69,9 +69,3 @@ This project is licensed under the OpenTalkGPT License. See the LICENSE file for
    - Click **Pull Requests** > **New Pull Request**.
    - Compare your fork with the original repository and submit your contribution.
 
----
-
-### **Optional: Create a ZIP for Distribution**
-If you want to redistribute the modified extension:
-1. Compress the modified folder into a ZIP file.
-2. Share the ZIP file or upload it to your forked GitHub repository.
