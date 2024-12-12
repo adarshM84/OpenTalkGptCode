@@ -9,7 +9,7 @@
 This project is licensed under the OpenTalkGPT License. See the LICENSE file for details.
 
 
-### Chrome Extention Link : <a href="https://chromewebstore.google.com/detail/opentalkgpt/idknomikbgopkhpepapoehhoafacddlk?authuser=0&hl=en-GB" target="_blank">OpenTalkGpt</a>
+### Chrome Extention Download Link : <a href="https://chromewebstore.google.com/detail/opentalkgpt/idknomikbgopkhpepapoehhoafacddlk?authuser=0&hl=en-GB" target="_blank">OpenTalkGpt</a>
 
 # For more info check here
 - https://github.com/adarshM84/OpenTalkGpt
