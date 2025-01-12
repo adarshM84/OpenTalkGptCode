@@ -7,12 +7,24 @@
     <link rel="icon" type="images/x-icon" href="icon48.png">
     <link rel="stylesheet" type="text/css" href="static/css/common.css">
     <link href="static/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="description"
+        content="OpenTalkGPT Chrome extension lets you chat seamlessly with open-source AI models like LLaMA via Ollama. With a sleek UI, configure servers, manage models, and personalize your AI assistant. Perfect for AI enthusiasts and developers to download, delete, or modify models easily." />
+    <meta name="keywords"
+        content="chatgpt,ollama,ollmaui,ollama ui,talk gpt,OpenTalkGPT, Chrome extension, LLaMA, Ollama, AI assistant, open-source models, chat with AI, manage models, download models, personalize AI, AI developers, AI enthusiasts, server configuration,ollama extention,chrome extention,free ai tools,ai tools,best extention,chatgpt extention" />
+    <meta name="author" content="Adarsh Mishra" />
+    <meta name="robots" content="index, follow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
 <body>
     <!-- nav bar start -->
     <nav class="navbar sticky-top navbar-light bg-dark text-light mb-4">
         <div class="container-fluid">
+            
+            <select class="form-select w-25 ollamaSettings" id="selectSavedChat">
+                <option value="">Select Saved Chat</option>
+                <option value="home">HOME</option>
+            </select>
             <h4 id="headTitle" class="text-center">
                 <i style="color:rgba(255, 165, 0, 0.85);;font-size: 1.5rem !important;">
                     OpenTalkGPT
@@ -28,21 +40,73 @@
                     </svg>
                 </span>
                 <span title="About Me" id="opneIntroIcon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle svg-Me" viewBox="0 0 16 16">
-                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-                      </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        class="bi bi-person-circle svg-Me" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                        <path fill-rule="evenodd"
+                            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                    </svg>
                 </span>
+                <a href="#" title="What's New" id="openFeatureList">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        class="mx-2 bi bi-newspaper svg-Me glowingSvg" viewBox="0 0 16 16">
+                        <path
+                            d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5zM12 14c.37 0 .654-.211.853-.441.092-.106.147-.279.147-.531V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5z" />
+                        <path
+                            d="M2 3h10v2H2zm0 3h4v3H2zm0 4h4v1H2zm0 2h4v1H2zm5-6h2v1H7zm3 0h2v1h-2zM7 8h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2z" />
+                    </svg>
+                </a>
                 <a href="faq.html" title="FAQ">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="mx-2 bi bi-question-circle-fill svg-Me" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247m2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"/>
-                      </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        class="bi bi-question-circle-fill svg-Me" viewBox="0 0 16 16">
+                        <path
+                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247m2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
+                    </svg>
                 </a>
             </div>
         </div>
     </nav>
     <!-- nav bar start -->
 
+    <!-- feature list start -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#featureModal"
+        id="openFeatureModalBtn" hidden>
+        Open feature
+    </button>
+    <div class="modal fade" id="featureModal" tabindex="-1" aria-labelledby="featureModal" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-3">What's New</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul>
+                                    <li class="fs-5 mt-3"><strong>Discover TextLLaMA:</strong> Looking for a tool to
+                                        check grammar with a right-click, compose emails, and translate? Check out our
+                                        new extension <a target="_blank"
+                                            href="https://chromewebstore.google.com/detail/textllama/phlhmokcogmcanhjhojccoockgkebiji?authuser=0&hl=en-GB"><strong>TextLLaMA</strong></a>.
+                                        <br>It runs using <strong>Ollama</strong> and works offline for unmatched
+                                        convenience!
+                                    </li>
+                                    <li class="fs-5 mt-3"><strong>Edit Your Questions:</strong> Now you can easily edit
+                                        the questions you've asked for better clarity and updates.</li>
+                                    <li class="fs-5 mt-3"><strong>Regenerate AI Responses:</strong> Need a fresh
+                                        perspective? Regenerate responses generated by AI effortlessly.</li>
+                                    <li class="fs-5 mt-3"><strong>Create Custom Modals:</strong> Customize your
+                                        experience by creating your own modals as per your needs.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- feature list end -->
 
     <!-- setting start -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#openSettingModal"
@@ -58,7 +122,8 @@
                         <a class="navbar-brand customTextCss">Manage Setting</a>
                         <ul class="nav nav-pills">
                             <li class="nav-item">
-                                <a class="nav-link openSettingDiv activeTab" name="ollamaSettingsDiv" href="#">Modal Settings</a>
+                                <a class="nav-link openSettingDiv activeTab" name="ollamaSettingsDiv" href="#">Modal
+                                    Settings</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link openSettingDiv" name="ollamaModalDownloadDiv" href="#">Manage
@@ -86,25 +151,25 @@
                         <!-- Ollama Setting Start -->
                         <div class="container scrollDiv settingsContDiv" id="ollamaSettingsDiv">
                             <h4 id="ollamaSettingsDiv">Modal Settings</h4>
-                                <div class="mb-2 row">
-                                    <label for="settingsType" class="col-sm-3 col-form-label">Settings Type</label>
-                                    <div class="d-flex align-items-center">
-                                        <div class="form-check col-sm-3">
-                                            <input class="form-check-input settingsType ollamaSettings" type="radio"
-                                                name="settingsType" value="basic">
-                                            <label class="form-check-label mx-1" for="basicSettings">
-                                                Basic
-                                            </label>
-                                        </div>
-                                        <div class="form-check col-sm-2">
-                                            <input class="form-check-input settingsType ollamaSettings" type="radio"
-                                                name="settingsType" value="advance">
-                                            <label class="form-check-label" for="advanceSettings">
-                                                Advance
-                                            </label>
-                                        </div>
+                            <div class="mb-2 row">
+                                <label for="settingsType" class="col-sm-3 col-form-label">Settings Type</label>
+                                <div class="d-flex align-items-center">
+                                    <div class="form-check col-sm-3">
+                                        <input class="form-check-input settingsType ollamaSettings" type="radio"
+                                            name="settingsType" value="basic">
+                                        <label class="form-check-label mx-1" for="basicSettings">
+                                            Basic
+                                        </label>
+                                    </div>
+                                    <div class="form-check col-sm-2">
+                                        <input class="form-check-input settingsType ollamaSettings" type="radio"
+                                            name="settingsType" value="advance">
+                                        <label class="form-check-label" for="advanceSettings">
+                                            Advance
+                                        </label>
                                     </div>
                                 </div>
+                            </div>
                             <!-- Advance settings -->
                             <div class="row" id="advanceSettings">
                                 <div class="mb-2 row">
@@ -170,18 +235,23 @@
                                 <div class="mb-2 row">
                                     <label class="col-sm-3 col-form-label">Remember Chat</label>
                                     <div class="col-sm-9 d-flex align-items-center">
-                                        <select class="form-select w-50 ollamaSettings" aria-label="Default select example" id="chatHistory">
+                                        <select class="form-select w-50 ollamaSettings"
+                                            aria-label="Default select example" id="tmpChatHistory">
+                                            <option value="0">0</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
                                             <option value="3">3</option>
                                             <option value="4">4</option>
                                             <option value="5">5</option>
                                         </select>
-                                       <span title="Note this can effect the answer speed given by Ai.">
-                                        <svg xmlns="http://www.w3.org/2000/svg"  width="22" height="22"  fill="currentColor" class="bi bi-info-circle-fill reactSvg mx-1" viewBox="0 0 16 16">
-                                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
-                                        </svg>
-                                       </span>
+                                        <span title="Note this can effect the answer speed given by Ai.">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+                                                fill="currentColor" class="bi bi-info-circle-fill reactSvg mx-1"
+                                                viewBox="0 0 16 16">
+                                                <path
+                                                    d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
+                                            </svg>
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="mb-2 row">
@@ -212,7 +282,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <p id="successMessage" class="text-success mt-2 blinking-text"><strong>Changes will be saved automatically when you make any updates.</strong></p>
+                            <p id="successMessage" class="text-success mt-2 blinking-text"><strong>Changes will be saved
+                                    automatically when you make any updates.</strong></p>
                             <!-- Common Settings End -->
                             <div>
                                 <span class="coustomMessage" id="settingsMessage"></span>
@@ -268,30 +339,34 @@
                                     <div class="mb-2 row">
                                         <label class="col-sm-3 col-form-label">Modal Name</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control w-50" id="customModalName" placeholder="Enter Name">
+                                            <input type="text" class="form-control w-50" id="customModalName"
+                                                placeholder="Enter Name">
                                         </div>
                                     </div>
                                     <div class="mb-2 row">
                                         <label class="col-sm-3 col-form-label">Modal List</label>
                                         <div class="col-sm-9">
-                                            <select class="form-select w-50"
-                                                aria-label="Default select example" id="presentModalList">
+                                            <select class="form-select w-50" aria-label="Default select example"
+                                                id="presentModalList">
                                             </select>
                                         </div>
                                     </div>
                                     <div class="mb-2 row">
                                         <label class="col-sm-3 col-form-label">Enter Instructions</label>
                                         <div class="col-sm-6">
-                                            <textarea id="modalInstruction" class="form-control" placeholder="Enter the instrucation for modal like : Act as Ben Tennyson Carton Charecter"></textarea>
+                                            <textarea id="modalInstruction" class="form-control"
+                                                placeholder="Enter the instrucation for modal like : Act as Ben Tennyson Carton Charecter"></textarea>
                                         </div>
                                     </div>
                                     <p id="showCreateMessage" class="text-danger mx-2" hidden>Hii</p>
                                     <div class="mb-2 row mt-3">
                                         <div>
-                                            <button id="createModal" class="customBtn customBtn-primary button--neumorphic" title="Click here to submit question">Create Modal</button>
+                                            <button id="createModal"
+                                                class="customBtn customBtn-primary button--neumorphic"
+                                                title="Click here to submit question">Create Modal</button>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -400,57 +475,79 @@
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-md-5 d-flex flex-column align-items-start gap-2">
-                                        <p class="text-body-black">This Chrome extension enables users to chat seamlessly with any open-source model, like LLaMA, supported by Ollama.<br><br> With a sleek, user-friendly UI, users can configure server details, manage models, and interact with their favorite AI assistants.<br><br> The extension offers complete flexibility to download, delete, and personalize models directly from the interface, making it a versatile tool for AI enthusiasts and developers alike. </p>
+                                        <p class="text-body-black">This Chrome extension enables users to chat
+                                            seamlessly with any open-source model, like LLaMA, supported by
+                                            Ollama.<br><br> With a sleek, user-friendly UI, users can configure server
+                                            details, manage models, and interact with their favorite AI
+                                            assistants.<br><br> The extension offers complete flexibility to download,
+                                            delete, and personalize models directly from the interface, making it a
+                                            versatile tool for AI enthusiasts and developers alike. </p>
                                     </div>
 
                                     <div class="col">
                                         <div class="row row-cols-1 row-cols-sm-2 g-4">
                                             <div class="col d-flex flex-column gap-2">
-                                                <div
-                                                    class="text-start">
-                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-lock featureSvg" viewBox="0 0 16 16">
-                                                        <path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/>
-                                                        <path d="M9.5 6.5a1.5 1.5 0 0 1-1 1.415l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99a1.5 1.5 0 1 1 2-1.415"/>
-                                                      </svg>
+                                                <div class="text-start">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        fill="currentColor" class="bi bi-shield-lock featureSvg"
+                                                        viewBox="0 0 16 16">
+                                                        <path
+                                                            d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56" />
+                                                        <path
+                                                            d="M9.5 6.5a1.5 1.5 0 0 1-1 1.415l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99a1.5 1.5 0 1 1 2-1.415" />
+                                                    </svg>
                                                 </div>
                                                 <h4 class="fw-semibold mb-0 text-body-emphasis">Work Offline</h4>
-                                                <p class="text-body-secondary">You can talk with modal without internet after setup.</p>
+                                                <p class="text-body-secondary">You can talk with modal without internet
+                                                    after setup.</p>
                                             </div>
 
                                             <div class="col d-flex flex-column gap-2">
-                                                <div
-                                                    class="text-start">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-kanban featureSvg" viewBox="0 0 16 16">
-                                                        <path d="M13.5 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm-11-1a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-                                                        <path d="M6.5 3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zm-4 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zm8 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1z"/>
-                                                      </svg>
+                                                <div class="text-start">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        fill="currentColor" class="bi bi-kanban featureSvg"
+                                                        viewBox="0 0 16 16">
+                                                        <path
+                                                            d="M13.5 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm-11-1a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                                        <path
+                                                            d="M6.5 3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zm-4 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1zm8 0a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1z" />
+                                                    </svg>
                                                 </div>
                                                 <h4 class="fw-semibold mb-0 text-body-emphasis">Easy Management</h4>
-                                                <p class="text-body-secondary">Download, configure, and delete models from a simple, intuitive UI.</p>
+                                                <p class="text-body-secondary">Download, configure, and delete models
+                                                    from a simple, intuitive UI.</p>
                                             </div>
 
                                             <div class="col d-flex flex-column gap-2">
-                                                <div
-                                                    class="text-start">
-                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-lock featureSvg" viewBox="0 0 16 16">
-                                                        <path d="M8 5a1 1 0 0 1 1 1v1H7V6a1 1 0 0 1 1-1m2 2.076V6a2 2 0 1 0-4 0v1.076c-.54.166-1 .597-1 1.224v2.4c0 .816.781 1.3 1.5 1.3h3c.719 0 1.5-.484 1.5-1.3V8.3c0-.627-.46-1.058-1-1.224M6.105 8.125A.64.64 0 0 1 6.5 8h3a.64.64 0 0 1 .395.125c.085.068.105.133.105.175v2.4c0 .042-.02.107-.105.175A.64.64 0 0 1 9.5 11h-3a.64.64 0 0 1-.395-.125C6.02 10.807 6 10.742 6 10.7V8.3c0-.042.02-.107.105-.175"/>
-                                                        <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"/>
-                                                      </svg>
+                                                <div class="text-start">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        fill="currentColor" class="bi bi-file-lock featureSvg"
+                                                        viewBox="0 0 16 16">
+                                                        <path
+                                                            d="M8 5a1 1 0 0 1 1 1v1H7V6a1 1 0 0 1 1-1m2 2.076V6a2 2 0 1 0-4 0v1.076c-.54.166-1 .597-1 1.224v2.4c0 .816.781 1.3 1.5 1.3h3c.719 0 1.5-.484 1.5-1.3V8.3c0-.627-.46-1.058-1-1.224M6.105 8.125A.64.64 0 0 1 6.5 8h3a.64.64 0 0 1 .395.125c.085.068.105.133.105.175v2.4c0 .042-.02.107-.105.175A.64.64 0 0 1 9.5 11h-3a.64.64 0 0 1-.395-.125C6.02 10.807 6 10.742 6 10.7V8.3c0-.042.02-.107.105-.175" />
+                                                        <path
+                                                            d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1" />
+                                                    </svg>
                                                 </div>
                                                 <h4 class="fw-semibold mb-0 text-body-emphasis">Secure Data</h4>
-                                                <p class="text-body-secondary">We are not storing any data.Therefore it is working offline also.</p>
+                                                <p class="text-body-secondary">We are not storing any data.Therefore it
+                                                    is working offline also.</p>
                                             </div>
 
                                             <div class="col d-flex flex-column gap-2">
-                                                <div
-                                                    class="text-start">
-                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-joystick featureSvg" viewBox="0 0 16 16">
-                                                        <path d="M10 2a2 2 0 0 1-1.5 1.937v5.087c.863.083 1.5.377 1.5.726 0 .414-.895.75-2 .75s-2-.336-2-.75c0-.35.637-.643 1.5-.726V3.937A2 2 0 1 1 10 2"/>
-                                                        <path d="M0 9.665v1.717a1 1 0 0 0 .553.894l6.553 3.277a2 2 0 0 0 1.788 0l6.553-3.277a1 1 0 0 0 .553-.894V9.665c0-.1-.06-.19-.152-.23L9.5 6.715v.993l5.227 2.178a.125.125 0 0 1 .001.23l-5.94 2.546a2 2 0 0 1-1.576 0l-5.94-2.546a.125.125 0 0 1 .001-.23L6.5 7.708l-.013-.988L.152 9.435a.25.25 0 0 0-.152.23"/>
-                                                      </svg>
+                                                <div class="text-start">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        fill="currentColor" class="bi bi-joystick featureSvg"
+                                                        viewBox="0 0 16 16">
+                                                        <path
+                                                            d="M10 2a2 2 0 0 1-1.5 1.937v5.087c.863.083 1.5.377 1.5.726 0 .414-.895.75-2 .75s-2-.336-2-.75c0-.35.637-.643 1.5-.726V3.937A2 2 0 1 1 10 2" />
+                                                        <path
+                                                            d="M0 9.665v1.717a1 1 0 0 0 .553.894l6.553 3.277a2 2 0 0 0 1.788 0l6.553-3.277a1 1 0 0 0 .553-.894V9.665c0-.1-.06-.19-.152-.23L9.5 6.715v.993l5.227 2.178a.125.125 0 0 1 .001.23l-5.94 2.546a2 2 0 0 1-1.576 0l-5.94-2.546a.125.125 0 0 1 .001-.23L6.5 7.708l-.013-.988L.152 9.435a.25.25 0 0 0-.152.23" />
+                                                    </svg>
                                                 </div>
                                                 <h4 class="fw-semibold mb-0 text-body-emphasis">Easy to Use</h4>
-                                                <p class="text-body-secondary">With a user-friendly UI, it is easy to use and helps to manage models.</p>                                                
+                                                <p class="text-body-secondary">With a user-friendly UI, it is easy to
+                                                    use and helps to manage models.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -548,6 +645,19 @@
                             <li>
                                 For any issue please check faq or drop a mail to me.
                             </li>
+                            <li>
+                                <ol>
+                                    <li><strong><i>If You are first time</i></strong> then got to below section and
+                                        download the ollama according to os :
+                                        <strong>Settings > Download Ollama</strong>
+                                    </li>
+                                    <li>After download go to <strong>Settings > Modal Setting</strong> and select the
+                                        modal you want to use and continue.</li>
+                                    <li>If no modal present to select and you are connected with ollama then go to
+                                        <strong>Settings > Manage Modal</strong> and download the modal which you want.
+                                    </li>
+                                </ol>
+                            </li>
                         </ul>
                     </span>
                 </p>
@@ -559,6 +669,19 @@
     <!-- main chat body -->
     <div id="chatContainer" class="container" hidden>
         <div class="row d-flex justify-content-center">
+            <div class="row">
+                <div class="col-md-11"></div>
+                <div class="col-md-1 saveChatDiv reactSvg" id="saveChatBtn" hidden>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-floppy-fill"
+                        viewBox="0 0 16 16">
+                        <title>Save Chat</title>
+                        <path
+                            d="M0 1.5A1.5 1.5 0 0 1 1.5 0H3v5.5A1.5 1.5 0 0 0 4.5 7h7A1.5 1.5 0 0 0 13 5.5V0h.086a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5H14v-5.5A1.5 1.5 0 0 0 12.5 9h-9A1.5 1.5 0 0 0 2 10.5V16h-.5A1.5 1.5 0 0 1 0 14.5z" />
+                        <path
+                            d="M3 16h10v-5.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5zm9-16H4v5.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5zM9 1h2v4H9z" />
+                    </svg>
+                </div>
+            </div>
             <div class="col-md-12">
                 <p id="watermark"><i><span class="text-danger">Note : </span> Some time it can give wrong
                         response.</i></p>
@@ -636,6 +759,8 @@
                         </div>
 
                     </div>
+                    <div id="chatContent">
+                    </div>
                 </div>
                 <!-- Query Buttons -->
                 <div class="buttongGroupDiv my-3 container">
@@ -655,7 +780,7 @@
                                 </span>
                                 <textarea type="text" id="userInput" rows="1" class="form-control"
                                     placeholder="Type your question..." aria-label="Input group example"
-                                    aria-describedby="basic-addon1"></textarea>
+                                    aria-describedby="basic-addon1" autofocus></textarea>
                             </div>
                         </div>
                         <div class="col-md-1">
