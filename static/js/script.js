@@ -39,6 +39,7 @@ if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.id) {
 
 //On Load Settings
 window.onload = () => {
+    loadNav("indexNav","index");
     initializeLocalStorageDefaults();
 
     if (localStorage.getItem("ollamaModal") && localStorage.getItem("ollamaModal") !== null && localStorage.getItem("ollamaModal").length != 0) {
@@ -60,16 +61,18 @@ window.onload = () => {
     document.getElementById("resetSettings").addEventListener("click", function () {
         if (confirm("Are you sure want to reset settings ?")) {
             localStorage.clear();
-            alert("Setting reset done.Now page will reload to apply changes.")
+            showSweetAlert("success","","Setting reset done.Now page will reload to apply changes.")
             window.location.reload();
         }
-    })
+    });
+
+    setSavedChat();
     setHostAddress(localStorage.getItem("hostAddress"));//To Do a post call for chat with ollama modals
     setModalSettingsList();
     setButtonFunctionCalls();//To Set Function Call On Buttons 
 }
 // Set Function End
-var chatHistory = [];
+var tmpChatHistory = [];
 
 function setHostAddress(hostName) {
     if (rebuildRules) {
@@ -78,24 +81,19 @@ function setHostAddress(hostName) {
     else if (hostName.length > 0) rebuildRules(hostName);
 }
 
-function setDefault(key, defaultValue,setForce=false) {
-    if (!localStorage.getItem(key) || localStorage.getItem(key).length === 0 || setForce) {
-        localStorage.setItem(key, defaultValue);
-    }
-}
-
 function initializeLocalStorageDefaults() {
     setDefault("parseContent", "true");
-    setDefault("isDownloaing", "false",true);
-    setDefault("stopChat", "false",true);
-    setDefault("chatInProcess", "false",true);
+    setDefault("isDownloaing", "false", true);
+    setDefault("stopChat", "false", true);
+    setDefault("chatInProcess", "false", true);
     setDefault("ollamaPort", "11434");
     setDefault("hostAddress", "localhost");
     setDefault("requestProtocol", "http");
     setDefault("settingsType", "basic");
     setDefault("useEmoji", "false");
     setDefault("modalConnectionUri", "http://localhost:11434");
-    setDefault("remTotalChat", "1");
+    setDefault("remTotalChat", "0");
+    setDefault("savedChat", JSON.stringify([]));
 }
 
 function setButtonFunctionCalls() {
@@ -105,6 +103,25 @@ function setButtonFunctionCalls() {
     });
     document.getElementById("askQuestion").addEventListener("click", function (event) {
         getQAnswer();
+    });
+    document.getElementById("saveChatBtn").addEventListener("click", function (event) {
+        var tmpChatName = prompt("Enter chat name to save : ")
+        if (tmpChatName.trim().length == 0) {
+            showSweetAlert("error","Please enter valid name.")
+        }
+        // Retrieve the saved chat data from localStorage
+        var tmpSavedChat = JSON.parse(localStorage.getItem("savedChat")) || [];
+
+        // Append the new chat data to the array
+        tmpSavedChat.push({
+            name: tmpChatName,
+            chatData: document.getElementById("chat").innerHTML
+        });
+
+        // Save the updated array back to localStorage
+        localStorage.setItem("savedChat", JSON.stringify(tmpSavedChat));
+        setSavedChat();
+        showSweetAlert("success","","Chat Saved !!")
     });
     document.getElementById("userInput").addEventListener("keydown", function (event) {
         if (event.key === "Enter" && !event.shiftKey) {
@@ -122,10 +139,16 @@ function setButtonFunctionCalls() {
     document.getElementById("opneIntroIcon").addEventListener("click", function (event) {
         openModal('openModalBtn')
     });
+    document.getElementById("openFeatureList").addEventListener("click", function (event) {
+        openModal('openFeatureModalBtn')
+    });
     document.getElementById("botImage").addEventListener("click", function (event) {
-        openModal('openModalBtn')
+        openModal('openModalBtn');
     });
     document.getElementById("modalList").addEventListener("click", function (event) {
+        setSettings(event);
+    })
+    document.getElementById("ragModallList").addEventListener("click", function (event) {
         setSettings(event);
     })
 
@@ -160,29 +183,70 @@ function setButtonFunctionCalls() {
     }
 }
 
+
+function chatDone(isDone) {
+    if (isDone) {
+        showElement("askQuestion", true);
+        showElement("stopChat", false);
+        localStorage.setItem("chatInProcess", "false");
+    } else {
+        showElement("askQuestion", false);
+        showElement("stopChat", true);
+        showElement("welcomeDiv", false);
+        showElement("saveChatBtn", true);
+        localStorage.setItem("stopChat", "false");
+    }
+}
+
+//To Set Saved Chat In Drowpdown
+function setSavedChat() {
+    var savedChat = JSON.parse(localStorage.getItem("savedChat"));
+    var tmpChatSelect = document.getElementById("selectSavedChat");
+
+    tmpChatSelect.innerHTML = "";
+
+    var tmpDefaultOption = document.createElement("option");
+    tmpDefaultOption.value = "";
+    tmpDefaultOption.innerHTML = "Select Saved Chat";
+
+    var tmpDefaultOption1 = document.createElement("option");
+    tmpDefaultOption1.value = "home";
+    tmpDefaultOption1.innerHTML = "HOME";
+
+    tmpChatSelect.appendChild(tmpDefaultOption);
+    tmpChatSelect.appendChild(tmpDefaultOption1);
+
+    for (i = 0; i < savedChat.length; i++) {
+        var tmpOption = document.createElement("option");
+        tmpOption.value = savedChat[i].chatData;
+        tmpOption.innerHTML = savedChat[i].name;
+        tmpChatSelect.appendChild(tmpOption);
+    }
+}
+
 //Set Settings On Changes
-function setSettings(event) {
-    // console.log(event.target.name, event.target.type)
+function setSettings(event, loadSettings = true) {
+    // console.log(event.target.name, event.target.id)
     if (event.target.type == "checkbox" && event.target.id == "useEmogi") {
         localStorage.setItem("useEmoji", event.target.checked);
     } else if (event.target.type == "checkbox" && event.target.id == "parseContent") {
         localStorage.setItem("parseContent", event.target.checked);
     } else if (event.target.type == "text" && event.target.id == "hostName") {
         if (event.target.value.trim().length == 0) {
-            alert("Please enter valid host name");
+            showSweetAlert("success","","Please enter valid host name");
             return;
         }
         setHostAddress(event.target.value);
         localStorage.setItem("hostAddress", event.target.value);
     } else if (event.target.type == "text" && event.target.id == "modalConnectionUri") {
         if (event.target.value.trim().length == 0) {
-            alert("Please enter valid uri");
+            showSweetAlert("success","","Please enter valid uri");
             return;
         }
         localStorage.setItem("modalConnectionUri", event.target.value);
     } else if (event.target.type == "text" && event.target.id == "ollamaPort") {
         if (event.target.value.trim().length == 0) {
-            alert("Please enter valid port");
+            showSweetAlert("success","","Please enter valid port");
             return;
         }
         localStorage.setItem("ollamaPort", event.target.value);
@@ -212,9 +276,15 @@ function setSettings(event) {
         } else {
             localStorage.setItem("settingsType", "basic");
         }
+    } else if (event.target.type == "select-one" && event.target.id == "ragModallList") {
+        if (event.target.value.trim().length == 0) {
+            showSweetAlert("success","","Please select modal");
+            return;
+        }
+        localStorage.setItem("ollamaRagModal", event.target.value);
     } else if (event.target.type == "select-one" && event.target.id == "modalList") {
         if (event.target.value.trim().length == 0) {
-            alert("Please select modal");
+            showSweetAlert("success","","Please select modal");
             return;
         }
         localStorage.setItem("ollamaModal", event.target.value);
@@ -222,10 +292,16 @@ function setSettings(event) {
   <path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/>
   <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
 </svg> `+ localStorage.getItem("ollamaModal");
-    } else if (event.target.type == "select-one" && event.target.id == "chatHistory") {
+    } else if (event.target.type == "select-one" && event.target.id == "tmpChatHistory") {
         localStorage.setItem("remTotalChat", event.target.value);
+    } else if (event.target.type == "select-one" && event.target.id == "selectSavedChat") {
+        showElement("welcomeDiv", event.target.value.length == 0);
+        if(event.target.value.toLowerCase()=="home") window.location.reload();
+        document.getElementById("chatContent").innerHTML = event.target.value;
+        loadSettings = false;
     }
-    setModalSettingsList();
+
+    if (loadSettings) setModalSettingsList();
 }
 
 //To Show The Os Wise Download
@@ -280,7 +356,7 @@ function showOsWiseDownload(selectedDivId, isDefaut) {
 //Bot response
 function getQAnswer(isRoleSet) {
     if (localStorage.getItem("chatInProcess") == "true") {
-        alert("Chat is in process.Please stop the chat or wait till it complete.");
+        showSweetAlert("error","Opps...","Chat is in process.Please stop the chat or wait till it complete.");
         return;
     }
     if (localStorage.getItem("qId") == 'NaN' || !localStorage.getItem("qId")) {
@@ -288,18 +364,17 @@ function getQAnswer(isRoleSet) {
     }
     var userQuery = document.getElementById('userInput').value.trim();
     if (userQuery.length == 0) {
-        alert("Please enter question");
+        showSweetAlert("error","","Please enter question");
         return
     }
     if (!localStorage.getItem("ollamaModal") || localStorage.getItem("ollamaModal") == "null" || localStorage.getItem("ollamaModal").length == 0) {
-        alert("Please select or download any modal.");
+        showSweetAlert("error","","Please select or download any modal.");
         return;
     }
     const lastDivid = addMessage(userQuery, "", "question");
     var useEmoji = "";
-    showElement("askQuestion", false);
-    showElement("stopChat", true);
-    showElement("welcomeDiv", false);
+
+    chatDone(false);//Reset The Settings
 
     if (isRoleSet) {
         if (localStorage.getItem("botDesc") != "null" && localStorage.getItem("botDesc").length > 0) {
@@ -319,14 +394,14 @@ function getQAnswer(isRoleSet) {
         userQuery = useEmoji.length > 0 ? useEmoji + " User Ask : " + userQuery : " User Ask : " + userQuery;
     }
 
-    chatHistory.push({ role: "user", content: userQuery });//Add For Chat History
+    tmpChatHistory.push({ role: "user", content: userQuery });//Add For Chat History
     localStorage.setItem("chatInProcess", "true");
     scrollDown("chat");
 
     var ollamaModal = localStorage.getItem("ollamaModal") ? localStorage.getItem("ollamaModal") : "llama3.2";
     const data = {
         model: ollamaModal,
-        messages: chatHistory,
+        messages: tmpChatHistory,
         stream: true
     };
 
@@ -353,9 +428,7 @@ function getQAnswer(isRoleSet) {
             // Define recursive function to continuously fetch responses
             function readStream() {
                 if (localStorage.getItem("stopChat") == "true") {
-                    showElement("askQuestion", true);
-                    showElement("stopChat", false);
-                    localStorage.setItem("chatInProcess", "false");
+                    chatDone(true);
                     console.log("Chat stopped by user.");
                     return; // Stop further execution if stopDownload is true
                 }
@@ -396,7 +469,7 @@ function getQAnswer(isRoleSet) {
                 try {
                     let jsonData = JSON.parse(jsonString);
                     if (jsonData.error) {
-                        alert("Not able to chat please check console for more.")
+                        showSweetAlert("error","Opps...","Not able to chat please check console for more.");
                         console.log(jsonData.error);
                         return;
                     }
@@ -406,16 +479,14 @@ function getQAnswer(isRoleSet) {
 
                     // Check if the response indicates "done: true"
                     if (jsonData.done) {
-                        showElement("askQuestion", true);
-                        showElement("stopChat", false);
+                        chatDone(true);
                         scrollDown("chat");
-                        localStorage.setItem("chatInProcess", "false");
                         var tmpBotAnswer = document.getElementById("botResponseDiv" + localStorage.getItem("qId")).textContent;
-                        chatHistory.push({ role: "assistant", content: tmpBotAnswer });//Add For Chat History
+                        tmpChatHistory.push({ role: "assistant", content: tmpBotAnswer });//Add For Chat History
 
                         //It will remember last chat set by user
-                        if (chatHistory.length == ((2 * localStorage.getItem("remTotalChat") + 2))) {
-                            chatHistory.splice(0, 2);
+                        if (tmpChatHistory.length == ((2 * localStorage.getItem("remTotalChat") + 2))) {
+                            tmpChatHistory.splice(0, 2);
                         }
                         showElement("welcomeDiv", false);
                     } else {
@@ -432,14 +503,11 @@ function getQAnswer(isRoleSet) {
         })
         .catch(error => {
             if (localStorage.getItem("ModalWorking") && localStorage.getItem("ModalWorking") == '1') {
-                alert("May be modal is not downloaded or selected.")
+                showSweetAlert("error","Opps...","May be modal is not downloaded or selected.");
             } else {
                 alert('Error:', "There was a problem with the fetch operation"); // Display error if any
             }
-            showElement("askQuestion", true);
-            showElement("stopChat", false);
-            localStorage.setItem("stopChat", "false");
-            localStorage.setItem("chatInProcess", "false");
+            chatDone(true);
             console.error('There was a problem with the fetch operation:', error);
         });
 
@@ -448,13 +516,158 @@ function getQAnswer(isRoleSet) {
     document.getElementById('userInput').classList.add("questionEnd");
 };
 
+//Re Answer Function
+function reAnswer(divId) {
+    if (!divId && divId.trim().length == 0) {
+        return;
+    }
+    if (divId.includes("reAnswer")) divId = divId.substr(8);
+
+    console.log("Div to answer", divId)
+
+    var qDivId = "userQuestion" + divId;
+    var ansDivId = "botResponse" + divId;
+
+    if (localStorage.getItem("chatInProcess") == "true") {
+        showSweetAlert("warning","Opps...","Chat is in process.Please stop the chat or wait till it complete.");
+        return;
+    }
+    if (localStorage.getItem("qId") == 'NaN' || !localStorage.getItem("qId")) {
+        localStorage.setItem("qId", 1)
+    }
+    var userQuery = document.getElementById(qDivId).textContent.trim();
+    if (userQuery.length == 0) {
+        showSweetAlert("success","","Please enter question");
+        return
+    }
+    if (!localStorage.getItem("ollamaModal") || localStorage.getItem("ollamaModal") == "null" || localStorage.getItem("ollamaModal").length == 0) {
+        showSweetAlert("success","","Please select or download any modal.");
+        return;
+    }
+
+    document.getElementById(ansDivId).innerHTML = '<p class="card-text placeholder-glow coustomSpinner"> <span class="placeholder col-7"></span> <span class="placeholder col-4"></span> <span class="placeholder col-4"></span> <span class="placeholder col-6"></span> <span class="placeholder col-8"></span> </p> </div> ';
+
+    tmpChatHistory.push({ role: "user", content: userQuery });//Add For Chat History
+    localStorage.setItem("chatInProcess", "true");
+    chatDone(false);//Reset The Settings
+
+    var ollamaModal = localStorage.getItem("ollamaModal") ? localStorage.getItem("ollamaModal") : "llama3.2";
+    const data = {
+        model: ollamaModal,
+        messages: tmpChatHistory,
+        stream: true
+    };
+
+    var apiUrl = "http://localhost:11434";
+    apiUrl = `${localStorage.getItem("requestProtocol")}://${localStorage.getItem("hostAddress")}:${localStorage.getItem("ollamaPort")}/api/chat`;
+    if (localStorage.getItem("settingsType") == "basic") apiUrl = localStorage.getItem("modalConnectionUri") + "/api/chat";
+
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.body.getReader();
+        }).then(reader => {
+            let decoder = new TextDecoder();
+            let buffer = ''; // Buffer to store incomplete JSON strings
+
+            // Define recursive function to continuously fetch responses
+            function readStream() {
+                if (localStorage.getItem("stopChat") == "true") {
+                    chatDone(true);
+                    console.log("Chat stopped by user.");
+                    return; // Stop further execution if stopDownload is true
+                }
+                reader.read().then(({ done, value }) => {
+                    if (done) {
+                        // Process any remaining buffer at the end of stream
+                        if (buffer !== '') {
+                            processJSON(buffer);
+                        }
+                        return;
+                    }
+
+                    // Append the new chunk of data to the buffer
+                    buffer += decoder.decode(value, { stream: true });
+
+                    // Process complete JSON objects in the buffer
+                    processBuffer();
+                });
+            }
+
+            // Function to process the buffer and extract complete JSON objects
+            function processBuffer() {
+                let chunks = buffer.split('\n');
+                buffer = '';
+
+                // Process each chunk
+                for (let i = 0; i < chunks.length - 1; i++) {
+                    let chunk = chunks[i];
+                    processJSON(chunk);
+                }
+
+                // Store the incomplete JSON for the next iteration
+                buffer = chunks[chunks.length - 1];
+            }
+
+            // Function to parse and process a JSON object
+            function processJSON(jsonString) {
+                try {
+                    let jsonData = JSON.parse(jsonString);
+                    if (jsonData.error) {
+                        showSweetAlert("error","Opps...","Not able to chat please check console for more.");
+                        console.log(jsonData.error);
+                        return;
+                    }
+                    // console.log(jsonData.message,jsonData.done)
+                    jsonData.response = jsonData.message.content.replace(/"/g, '');
+                    addMessage("", jsonData.response, "answer", divId);
+
+                    // Check if the response indicates "done: true"
+                    if (jsonData.done) {
+                        chatDone(true);
+                        showElement("welcomeDiv", false);
+                    } else {
+                        // Continue reading the stream
+                        readStream();
+                    }
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                }
+            }
+
+            // Start reading the stream
+            readStream();
+        })
+        .catch(error => {
+            if (localStorage.getItem("ModalWorking") && localStorage.getItem("ModalWorking") == '1') {
+                showSweetAlert("error","Opps...","May be modal is not downloaded or selected.");
+            } else {
+                showSweetAlert("error","Opps...","There was a problem with the fetch operation");
+            }
+            chatDone(true);
+            console.error('There was a problem with the fetch operation:', error);
+        });
+
+    // Clear the input field
+    document.getElementById('userInput').value = '';
+    document.getElementById('userInput').classList.add("questionEnd");
+}
+
 //Set Bot Prompt
 function setRole(event, isCoustom = false, inputId = "") {
     var botRole = "";
     if (isCoustom) {
         botRole = document.getElementById(inputId).value.trim();
         if (botRole.length == 0) {
-            alert("Enter valid role");
+            showSweetAlert("error","Opps...","Enter valid role");
             return
         }
     } else {
@@ -504,12 +717,6 @@ function createModal() {
     }
 
     var modelfile = "FROM " + selectedModal + "\nSYSTEM " + modalInstruction;
-    console.log(customModalName, modelfile)
-
-    // curl http://localhost:11434/api/create -d '{
-    //     "model": "ben10",
-    //     "modelfile": "FROM llama3.2:1b\nSYSTEM Act as ben tenyson"
-    //   }'
 
     if (localStorage.getItem("ModalWorking") && localStorage.getItem("ModalWorking") == "1") {
         const data = {
@@ -597,7 +804,7 @@ function createModal() {
 
                         // Check if the response indicates "done: true"
                         if (jsonData.status && jsonData.status == "success") {
-                            alert("Modal Creation Completed.");
+                            showSweetAlert("success","","Modal Creation Completed.");
                             document.getElementById("customModalName").value = "";
                             document.getElementById("presentModalList")[0].selected = true;
                             document.getElementById("modalInstruction").value = "";
@@ -618,7 +825,7 @@ function createModal() {
             });
 
     } else {
-        alert("Opps ollama modal is not running please check.");
+        showSweetAlert("error","Opps...","Ollama modal is not running please check.");
     }
 
 }

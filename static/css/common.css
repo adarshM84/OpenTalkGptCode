@@ -5,6 +5,18 @@ body {
     scrollbar-width: none !important;
 }
 
+body.dark {
+    /* background: #E3F2FD !important; */
+    background: rgba(25, 40, 48, 255) !important;
+    /* background: black !important;
+    color: white !important; */
+    scrollbar-width: none !important;
+}
+
+.card.dark {
+    color: white !important;
+}
+
 .chatDiv {
     height: 70vh !important;
     overflow-y: auto !important;
@@ -129,11 +141,20 @@ code {
     color: #000000 !important;
     word-wrap: break-word !important;
     background-color: #f1f1f1 !important;
-
 }
 
-#headTitle {
+.headTitle {
     margin: 0px !important;
+    color: #333;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+.headTitle i{
+    font-size: 1.5rem !important;
+}
+
+#headRagTitle{
+    margin-left: 24% !important;
 }
 
 .userQuery {
@@ -142,10 +163,36 @@ code {
     border-top-left-radius: 10px;
     padding: 10px 4px 10px 25px;
     overflow: auto;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 18px;
+    /* font-weight: bold; */
     border: 2px black solid;
 }
+
+.whatnew {
+    height: 30px;
+    width: 30px;
+    /* animation: bounce 1.5s ease-in-out infinite;; */
+    filter: drop-shadow(0 0 6px #4ecdc4);
+}
+
+.ragicon {
+    height: 30px;
+    width: 30px;
+    animation: bounce 1.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
 
 .botResponse {
     /* background: #a8e2e0; */
@@ -153,7 +200,7 @@ code {
     padding: 2px 10px 2px 25px;
     overflow: auto;
     white-space: pre-line;
-    font-size: 18px;
+    font-size: 16px;
     border: 2px black solid;
 
     /* From https://css.glass */
@@ -166,9 +213,16 @@ code {
     /* border: 1px solid rgba(0, 255, 12, 0.3);S */
 
 }
-.botResponseContent{
+
+.botResponseContent {
     white-space: pre-line !important;
-    width:100% !important;
+    width: 100% !important;
+    line-height: 1.5 !important;
+}
+
+#selectSavedChat {
+    width: 15% !important;
+    background: #ffffff !important;
 }
 
 .customCodeBlock {
@@ -180,17 +234,28 @@ code {
     max-width: 98% !important;
     display: inline-table;
     box-shadow: 5px 3px 3px 0px;
+    margin-bottom: 10px;
+}
+
+.saveChatDiv {
+    display: flex;
+    align-items: center;
+    position: relative;
+    top: 15px;
+    z-index: 7;
 }
 
 .htmlCode {
     background-color: #f4f4f4;
     border: 1px solid #ccc;
 }
-.phpCode{
+
+.phpCode {
     background-color: #ecc2fa;
     border: 1px solid #ccc;
 }
-.cppCode{
+
+.cppCode {
     background-color: #fac2d3;
     border: 1px solid #ccc;
 }
@@ -248,10 +313,24 @@ button:focus {
     box-shadow: none !important;
 }
 
+.editDiv {
+    background-color: #bdfff3 !important;
+    /* Ensure initial background color */
+}
+
+.editQuestionSvg {
+    display: flex;
+    flex-direction: row-reverse;
+    position: relative;
+    top: 14px;
+    right: 5px;
+    cursor: pointer;
+}
+
 .responseSvg {
     position: relative;
+    display: flex;
     bottom: 14px;
-    left: 10px;
 }
 
 .reactSvg {
@@ -345,14 +424,14 @@ button:focus {
 
 /* For Error Show */
 .customCard {
-    rotate: 2deg;
+    /* rotate: 2deg; */
     box-shadow: 10px 11px 11px;
 }
 
 .customCard:hover {
     rotate: 0deg;
     color: white;
-    box-shadow: 10px 11px 11px solid black;
+    /* box-shadow: 10px 11px 11px solid black; */
 }
 
 .card img {
@@ -365,13 +444,13 @@ a {
 }
 
 .card-img-overlay:hover {
-    background: #ff6b6b;
+    /* background: #ff6b6b; */
+    color: black !important;
 }
 
 .card-img-overlay {
     background: #ffe5e5;
-    height: 108%;
-    opacity: 0.8;
+    height: 150%;
 }
 
 /* card hover effect */
@@ -439,6 +518,10 @@ a {
     border-left: 1px solid !important;
 }
 
+.sendReview {
+    animation: hearbeat 1.75s linear infinite
+}
+
 /* card hover effect End*/
 
 /* For Error Show End */
@@ -461,6 +544,10 @@ a {
         opacity: 1;
     }
 }
+
+/*
+* hover/slow bounce animation
+*/
 
 @keyframes float {
     0% {
@@ -501,25 +588,39 @@ a {
     }
 }
 
-@keyframes rotateIcon {
-    10% {
-        rotate: 30deg;
+/*
+* heart pulse animation
+*/
+@keyframes hearbeat {
+    0% {
+        transform: scale(1);
     }
 
     25% {
-        rotate: 40deg;
+        transform: scale(1.25);
     }
 
-    50% {
-        rotate: 60deg;
+    35% {
+        transform: scale(1);
     }
 
-    75% {
-        rotate: 40deg;
+    45% {
+        transform: scale(1.25);
+    }
+
+    55% {
+        transform: scale(1);
+    }
+}
+
+
+@keyframes rotateIcon {
+    0% {
+        transform: rotate(0deg);
     }
 
     100% {
-        rotate: 30deg;
+        transform: rotate(360deg);
     }
 }
 
@@ -534,7 +635,11 @@ a {
 
 .svg-Me {
     cursor: pointer;
-    color: rgba(255, 165, 0, 0.85);
+    color: black;
+}
+
+.ourNav {
+    background: #b5daea !important;
 }
 
 #ownerImage {
@@ -586,6 +691,10 @@ a {
     animation: rotateIcon 3s linear infinite;
 }
 
+.bi-newspaper {
+    animation: ghost-hover 2s linear alternate infinite
+}
+
 .backgroundLightWhite {
     background: #f5f5f596 !important;
     color: #333333 !important;
@@ -619,3 +728,25 @@ a {
 .form-select {
     background: #ffffff7a !important;
 }
+
+/*
+* hover/slow bounce animation
+*/
+@keyframes ghost-hover {
+    0% {
+        transform: translate(0%, -15%);
+        color: rgba(189, 255, 189, 0.761);
+    }
+
+    50% {
+        transform: translate(0%, 0%);
+        color: rgba(189, 255, 189, 0.761);
+    }
+
+    100% {
+        transform: translate(0%, 15%);
+    }
+}
+
+
+/* For back animation end */

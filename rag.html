@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PDF Q&A (Optimized RAG with Ollama)</title>
+    <script src="pdfjs-2.14.305-dist/pdf.js"></script>
+    <link href="static/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs-2.14.305-dist/pdf.worker.js';
+    </script> -->
+    <link rel="stylesheet" href="static/css/rag.css">
+    <link rel="stylesheet" href="static/css/common.css">
+    <script src="static/js/sweetalert2.all.min.js"></script>
+    <link href="static/css/sweetalert2.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <nav class="navbar sticky-top text-dark mb-4 ourNav" id="ragNav">
+    </nav>
+    <div class="container">
+        <div class="status" id="status">Upload PDF files to start chat...</div>
+
+        <input type="file" id="pdfInput" accept="application/pdf" multiple>
+
+        <div id="chatMain">
+            <div id="chat"></div>
+            <!-- <div id="ragLoading" class="ragLoading" hidden>
+                <p class="card-text placeholder-glow coustomSpinner"> <span class="placeholder col-7"></span> <span
+                        class="placeholder col-4"></span> <span class="placeholder col-4"></span> <span
+                        class="placeholder col-6"></span> <span class="placeholder col-8"></span> </p>
+            </div> -->
+        </div>
+        <div class="input-area">
+            <input type="text" class="questionInput" id="userQuestion" placeholder="Ask a question...">
+            <button id="stopChat" class="customBtn customBtn-danger button--neumorphic" title="Click here to stop chat"
+                hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                    class="bi bi-stop-circle-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.5 5A1.5 1.5 0 0 0 5 6.5v3A1.5 1.5 0 0 0 6.5 11h3A1.5 1.5 0 0 0 11 9.5v-3A1.5 1.5 0 0 0 9.5 5z" />
+                </svg>
+            </button>
+            <button id="askBtn">Ask</button>
+        </div>
+    </div>
+    </div>
+
+    <script src="static/js/common.js"></script>
+    <script src="static/js/rag.js" defer></script>
+    <script src="static/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

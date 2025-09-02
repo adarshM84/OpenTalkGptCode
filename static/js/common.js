@@ -2,25 +2,128 @@ var i = 0;
 var botMessage = "";
 var speed = 10;
 var allDownloadModalList = [
-    { name: "llama3.2:1b", size: "1.3 GB", downloaded: false },
-    { name: "llama3.2:latest", size: "2.0 GB", downloaded: false },
-    { name: "llama3.1:latest", size: "4.7 GB", downloaded: false },
-    { name: "llama3.1:70b", size: "40 GB", downloaded: false },
-    { name: "llama3.1:405b", size: "231 GB", downloaded: false },
-    { name: "phi3:latest", size: "2.3 GB", downloaded: false },
-    { name: "phi3:medium", size: "7.9 GB", downloaded: false },
-    { name: "gemma2:2b", size: "1.6 GB", downloaded: false },
-    { name: "gemma2:latest", size: "5.5 GB", downloaded: false },
-    { name: "gemma2:27b", size: "16 GB", downloaded: false },
-    { name: "mistral:latest", size: "4.1 GB", downloaded: false },
-    { name: "moondream:latest", size: "829 MB", downloaded: false },
-    { name: "neural-chat:latest", size: "4.1 GB", downloaded: false },
-    { name: "starling-lm:latest", size: "4.1 GB", downloaded: false },
-    { name: "codellama:latest", size: "3.8 GB", downloaded: false },
-    { name: "llama2-uncensored:latest", size: "3.8 GB", downloaded: false },
-    { name: "llava:latest", size: "4.5 GB", downloaded: false },
-    { name: "solar:latest", size: "6.1 GB", downloaded: false }
+    { name: "gemma3:1b", size: "815MB", downloaded: false, type: "Chat" },
+    { name: "llama3.2:1b", size: "1.3 GB", downloaded: false, type: "Chat" },
+    { name: "gemma2:2b", size: "1.6 GB", downloaded: false, type: "Chat" },
+    { name: "nomic-embed-text:latest", size: "274MB", downloaded: false, type: "Embedding" },
+    { name: "nomic-embed-text:v1.5", size: "274MB", downloaded: false, type: "Embedding" },
+    { name: "llama3.2:latest", size: "2.0 GB", downloaded: false, type: "Chat" },
+    { name: "llama3.1:latest", size: "4.7 GB", downloaded: false, type: "Chat" },
+    { name: "deepseek-r1:7b", size: "4.7 GB", downloaded: false, type: "Chat" },
+    { name: "deepseek-r1:8b", size: "4.9GB", downloaded: false, type: "Chat" },
+    { name: "deepseek-r1:14b", size: "9.0GB", downloaded: false, type: "Chat" },
+    { name: "llama3.1:70b", size: "40 GB", downloaded: false, type: "Chat" },
+    { name: "llama3.1:405b", size: "231 GB", downloaded: false, type: "Chat" },
+    { name: "phi3:latest", size: "2.3 GB", downloaded: false, type: "Chat" },
+    { name: "phi3:medium", size: "7.9 GB", downloaded: false, type: "Chat" },
+    { name: "deepseek-r1:1.5b", size: "1.1GB", downloaded: false, type: "Chat" },
+    { name: "gemma2:latest", size: "5.5 GB", downloaded: false, type: "Chat" },
+    { name: "gemma2:27b", size: "16 GB", downloaded: false, type: "Chat" },
+    { name: "mistral:latest", size: "4.1 GB", downloaded: false, type: "Chat" },
+    { name: "moondream:latest", size: "829 MB", downloaded: false, type: "Chat" },
+    { name: "neural-chat:latest", size: "4.1 GB", downloaded: false, type: "Chat" },
+    { name: "starling-lm:latest", size: "4.1 GB", downloaded: false, type: "Chat" },
+    { name: "codellama:latest", size: "3.8 GB", downloaded: false, type: "Chat" },
+    { name: "llama2-uncensored:latest", size: "3.8 GB", downloaded: false, type: "Chat" },
+    { name: "llava:latest", size: "4.5 GB", downloaded: false, type: "Chat" },
+    { name: "solar:latest", size: "6.1 GB", downloaded: false, type: "Chat" }
 ];
+
+let customeNav = `
+<div class="container-fluid">
+            <select class="form-select w-25 ollamaSettings" id="selectSavedChat">
+                <option value="">Select Saved Chat</option>
+                <option value="home">HOME</option>
+            </select>
+            <h4 id="headTitle" class="text-center headTitle" hidden>
+               
+                    OpenTalkGPT
+               
+            </h4>
+            <h2 id="headRagTitle" class="text-center headTitle">
+                
+                    OpenTalkGPT - PDF Q&A (Optimized RAG)
+                
+            </h2>
+            
+            <div class="buttongGroup">
+                <span class="badge text-black customBtn-primary" id="modalInfo" title="Seleted modal">DOWNLOADED</span>
+                <span title="Settings" class="mx-2 oppenSettingsModal" id="openSettingIcon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        class="bi bi-gear-wide-connected svg-Me" viewBox="0 0 16 16">
+                        <path
+                            d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z" />
+                    </svg>
+                </span>
+                <span title="About Me" id="opneIntroIcon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        class="bi bi-person-circle svg-Me" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                        <path fill-rule="evenodd"
+                            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                    </svg>
+                </span>
+                <a href="faq.html" class="mx-1" title="FAQ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        class="bi bi-question-circle-fill svg-Me" viewBox="0 0 16 16">
+                        <path
+                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247m2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
+                    </svg>
+                </a>
+                <a href="#" title="What's New" id="openFeatureList">
+                    <img src="static/images/whatnew.png" class="whatnew" alt="">
+                </a>
+                <a href="index.html" title="Home" id="homeButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-house-door-fill svg-Me" viewBox="0 0 16 16">
+                        <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"/>
+                    </svg>
+                </a>
+                
+                <a href="rag.html" title="Rag - Chat with pdf">
+                    <img src="static/images/rag.png" id="ragButton" class="ragicon" alt="">
+                </a>
+            </div>
+        </div>
+`;
+
+
+function loadNav(elementId, type = "other") {
+    document.getElementById(elementId).innerHTML = customeNav;
+    if (type == "other") {
+        showElement("opneIntroIcon", false);
+        showElement("ragButton", false);
+        showElement("headTitle", false);
+        showElement("headRagTitle", true);
+        showElement("selectSavedChat", false);
+        showElement("openFeatureList", false);
+        showElement("openSettingIcon", false);
+    } else {
+        showElement("homeButton", false);
+        showElement("headTitle", true);
+        showElement("headRagTitle", false);
+    }
+}
+
+function showSweetAlert(messageType = "error", title = "Oops...", htmlMessage = "", footerMessage = '<a href="index.html">Home</a>') {
+    Swal.fire({
+        icon: messageType,
+        title: title,
+        html: htmlMessage,
+        footer: footerMessage,
+        // allowOutsideClick: false, // Prevent closing by clicking outside
+        allowEscapeKey: false,    // Prevent ESC from closing
+        allowEnterKey: false,     // Prevent Enter key from closing
+        showCancelButton: false,  // Only one button
+        confirmButtonText: 'OK',  // Button text
+        draggable: true           // Keep draggable if you want
+    }).then((result) => {
+        if (result.isConfirmed) {
+            console.log("User clicked OK");
+            // Put your next logic here
+        }
+    });
+}
+
 
 
 function getCode(event) {
@@ -29,6 +132,20 @@ function getCode(event) {
     event.currentTarget.getElementsByTagName("svg")[0].setAttribute("style", "display:none");
     event.currentTarget.getElementsByTagName("svg")[1].setAttribute("style", "display:initial");
 }
+
+function isModalPresent(name, type) {
+    for (let i = 0; i < allDownloadModalList.length; i++) {
+        const modal = allDownloadModalList[i];
+        if (
+            modal.name?.toLowerCase().includes(name.toLowerCase()) &&
+            modal.type?.toLowerCase().includes(type.toLowerCase())
+        ) {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 function parseText(input) {
     // Escape any HTML in the input to prevent parsing
@@ -73,16 +190,22 @@ function parseText(input) {
         lang = lang || "general"; // Default to 'general' if no language is specified
         return wrapCodeBlock(lang, code);
     });
+
+    // Replace headings, ignoring text inside code blocks
+    formatted = formatted.replace(/(?!<div class="[^"]*">)(\#{2,})(.*?)(?!<\/div>)/g, (match, hashes, content) => {
+        const level = hashes.length; // Determine the header level
+        return `<h${level}>${content.trim()}</h${level}>`;
+    });
     return formatted;
 }
 
-function typeWriter() {
-    var parentDivId = "botResponse" + parseInt(localStorage.getItem("qId"));
-    if(localStorage.getItem("parseContent") == "true"){
+function typeWriter(ansDivId = parseInt(localStorage.getItem("qId"))) {
+    var parentDivId = "botResponse" + ansDivId;
+    if (localStorage.getItem("parseContent") == "true") {
         document.getElementById(parentDivId).innerHTML = (localStorage.getItem("parseContent") == "true") ? parseText(botMessage) : botMessage;
         setFunctionCallByClass("codeBage", "click", getCode);
-    }else{
-        document.getElementById(parentDivId).innerHTML = botMessage;
+    } else {
+        document.getElementById(parentDivId).textContent = botMessage;
     }
 }
 
@@ -94,6 +217,12 @@ function getOsType() {
     if (platform.includes('iphone') || platform.includes('ipad')) return 'iOS';
     if (platform.includes('android')) return 'Android';
     return 'Unknown';
+}
+
+function setDefault(key, defaultValue, setForce = false) {
+    if (!localStorage.getItem(key) || localStorage.getItem(key).length === 0 || setForce) {
+        localStorage.setItem(key, defaultValue);
+    }
 }
 
 function checkTime(i) {
@@ -119,50 +248,88 @@ function setFunctionCallByClass(elementClassName, actionType, func, funcElementI
 }
 
 //Show Div Message For Chat
-function addMessage(userQ, botAn, msgType, ansDivNo = parseInt(localStorage.getItem("qId"))) {
+function addMessage(userQ, botAn, msgType, ansDivNo = parseInt(localStorage.getItem("qId")), qDivNo = false, parentDivId = "chatContent") {
     if (msgType == "question") {
-        localStorage.setItem("qId", parseInt(localStorage.getItem("qId")) + 1)
+        if (qDivNo == false) {
+            localStorage.setItem("qId", parseInt(localStorage.getItem("qId")) + 1);
+            qDivNo = parseInt(localStorage.getItem("qId"));
+        }
+
         var chatRow = document.createElement("div");
-        chatRow.className = "chatRow my-3";
-        chatRow.id = "chatRow" + parseInt(localStorage.getItem("qId"));
+        chatRow.className = "chatRow";
+        chatRow.id = "chatRow" + qDivNo;
         chatRow.setAttribute("style", "white-space: pre-line;line-height: 1.6;");
 
         var userQDiv = document.createElement("div");
         userQDiv.className = "userQuery d-flex justify-content-start";
+        userQDiv.id = "userQuestion" + qDivNo;
         userQDiv.textContent = userQ;//Set Question
+
+
+
+        var editQuestion = document.createElement("div");
+        editQuestion.className = "editQuestionSvg";
+        editQuestion.innerHTML = '<svg name=' + parseInt(localStorage.getItem("qId")) + ' xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16"> <path name=' + parseInt(localStorage.getItem("qId")) + ' d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/> <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/> </svg>';
+        editQuestion.addEventListener("click", function (event) {
+            if (document.getElementById("userQuestion" + event.target.getAttribute('name')).classList.contains("editDiv")) {
+                document.getElementById("userQuestion" + event.target.getAttribute('name')).classList.remove("editDiv");
+                document.getElementById("userQuestion" + event.target.getAttribute('name')).contentEditable = false;
+            } else {
+                document.getElementById("userQuestion" + event.target.getAttribute('name')).classList.add("editDiv");
+                document.getElementById("userQuestion" + event.target.getAttribute('name')).contentEditable = true;
+            }
+        });
 
         var botAnDiv = document.createElement("div");
         botAnDiv.className = "botResponse d-flex justify-content-start";
-        botAnDiv.id = "botResponseDiv" + parseInt(localStorage.getItem("qId"));
+        botAnDiv.id = "botResponseDiv" + qDivNo;
 
         var botAnEl = document.createElement("p");
-        botAnEl.id = "botResponse" + parseInt(localStorage.getItem("qId"));
-        botAnEl.className="botResponseContent";
-        botAnEl.setAttribute("style", "width:100% !important;")
+        botAnEl.id = "botResponse" + qDivNo;
+        botAnEl.className = "botResponseContent";
+        botAnEl.setAttribute("style", "width:100% !important;");
         // botAnEl.innerHTML = '<span class="mt-1 coustomSpinner">Loading</span> <span class="spinner-grow spinner-grow-sm mt-2" role="status" aria-hidden="true"></span><span class="spinner-grow spinner-grow-sm mt-2" role="status" aria-hidden="true"></span><span class="spinner-grow spinner-grow-sm mt-2" role="status" aria-hidden="true"></span>';
         botAnEl.innerHTML = '<p class="card-text placeholder-glow coustomSpinner"> <span class="placeholder col-7"></span> <span class="placeholder col-4"></span> <span class="placeholder col-4"></span> <span class="placeholder col-6"></span> <span class="placeholder col-8"></span> </p> </div> ';
         botAnDiv.appendChild(botAnEl);
 
-        var divSvgList = document.createElement("div");
-        divSvgList.className = "responseSvg"
-        divSvgList.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-clipboard2-fill reactSvg copyResponse" viewBox="0 0 16 16"  id="copy' + parseInt(localStorage.getItem("qId")) + '"><path id="' + parseInt(localStorage.getItem("qId")) + '" d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5z"/><path id="' + parseInt(localStorage.getItem("qId")) + '" d="M3.5 1h.585A1.5 1.5 0 0 0 4 1.5V2a1.5 1.5 0 0 0 1.5 1.5h5A1.5 1.5 0 0 0 12 2v-.5q-.001-.264-.085-.5h.585A1.5 1.5 0 0 1 14 2.5v12a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-12A1.5 1.5 0 0 1 3.5 1"/><title>Copy Response</title>    </svg>                                                                                  <svg id="copied' + parseInt(localStorage.getItem("qId")) + '" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-clipboard-check-fill reactSvg" viewBox="0 0 16 16" style="display:none"><path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z"/><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708"/><title>Copied</title></svg> '
+        var svgDivList = document.createElement("div");
+        svgDivList.className = "responseSvg";
 
+        var copySvgDiv = document.createElement("div");
+        copySvgDiv.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-clipboard2-fill reactSvg copyResponse mx-1" viewBox="0 0 16 16"  id="copy' + parseInt(localStorage.getItem("qId")) + '"><path id="' + parseInt(localStorage.getItem("qId")) + '" d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5z"/><path id="' + parseInt(localStorage.getItem("qId")) + '" d="M3.5 1h.585A1.5 1.5 0 0 0 4 1.5V2a1.5 1.5 0 0 0 1.5 1.5h5A1.5 1.5 0 0 0 12 2v-.5q-.001-.264-.085-.5h.585A1.5 1.5 0 0 1 14 2.5v12a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-12A1.5 1.5 0 0 1 3.5 1"/><title>Copy Response</title>    </svg> <svg id="copied' + parseInt(localStorage.getItem("qId")) + '" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-clipboard-check-fill reactSvg mx-1" viewBox="0 0 16 16" style="display:none"><path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z"/><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708"/><title>Copied</title></svg> ';
+
+        var reAnswerDiv = document.createElement("div");
+        reAnswerDiv.innerHTML = '<svg style="background: black !important; color: white !important; border-radius: 10px !important;" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-arrow-repeat reactSvg mx-1" viewBox="0 0 16 16" id="reAnswer' + parseInt(localStorage.getItem("qId")) + '"> <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/> <path id="' + parseInt(localStorage.getItem("qId")) + '" fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/><title>Regenrate</title> </svg>';
+
+        var sendReview = document.createElement("div");
+        sendReview.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-balloon-heart-fill reactSvg mx-1 sendReview text-danger" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M8.49 10.92C19.412 3.382 11.28-2.387 8 .986 4.719-2.387-3.413 3.382 7.51 10.92l-.234.468a.25.25 0 1 0 .448.224l.04-.08c.009.17.024.315.051.45.068.344.208.622.448 1.102l.013.028c.212.422.182.85.05 1.246-.135.402-.366.751-.534 1.003a.25.25 0 0 0 .416.278l.004-.007c.166-.248.431-.646.588-1.115.16-.479.212-1.051-.076-1.629-.258-.515-.365-.732-.419-1.004a2 2 0 0 1-.037-.289l.008.017a.25.25 0 1 0 .448-.224l-.235-.468ZM6.726 1.269c-1.167-.61-2.8-.142-3.454 1.135-.237.463-.36 1.08-.202 1.85.055.27.467.197.527-.071.285-1.256 1.177-2.462 2.989-2.528.234-.008.348-.278.14-.386"/><title>Write Review</title>
+</svg>`;
+
+        svgDivList.appendChild(copySvgDiv);
+        svgDivList.appendChild(reAnswerDiv);
+        svgDivList.appendChild(sendReview);
+
+        chatRow.appendChild(editQuestion);
         chatRow.appendChild(userQDiv);
         chatRow.appendChild(botAnDiv);
-        chatRow.appendChild(divSvgList);
-        divSvgList.addEventListener("click", function (event) { copyResponse(event.target.id) })
+        chatRow.appendChild(svgDivList);
 
+        copySvgDiv.addEventListener("click", function (event) { copyResponse(event.target.id) });
+        sendReview.addEventListener("click", function (event) { window.open("https://chromewebstore.google.com/detail/opentalkgpt/idknomikbgopkhpepapoehhoafacddlk/reviews") });
+        reAnswerDiv.addEventListener("click", function (event) { reAnswer(event.target.id) });
 
-        document.getElementById("chat").appendChild(chatRow);
+        document.getElementById(parentDivId).appendChild(chatRow);
         return parseInt(localStorage.getItem("qId"));
     } else if (msgType == "answer") {
-        if (document.getElementById("botResponse" + ansDivNo).innerHTML.search("coustomSpinner") != -1) {
-            document.getElementById("botResponse" + ansDivNo).innerHTML = "";
+        var ansDivid = "botResponse" + ansDivNo;
+        if (document.getElementById(ansDivid).innerHTML.search("coustomSpinner") != -1) {
+            document.getElementById(ansDivid).innerHTML = "";
             botMessage = "";
         }
         botMessage += botAn;
-        document.getElementById("botResponse" + ansDivNo).setAttribute("style", "white-space: pre-line;width:100% !important;");
-        typeWriter("chat");
+        document.getElementById(ansDivid).setAttribute("style", "white-space: pre-line;width:100% !important;");
+        typeWriter(ansDivNo);
     }
     // scrollDown("chat"); This may be annoying to show scroll every time
 }
@@ -283,6 +450,10 @@ function loadModalTableData(modalInfo) {
         tmpThSize.innerHTML = modalInfo[i].size;
         tmpThSize.classList.add("backgroundLightWhite", "text-center");
 
+        var tmpType = document.createElement("td");
+        tmpType.innerHTML = `<span class="badge text-black text-break ${modalInfo[i].type?.toLowerCase() !== "chat" ? "customBtn-warning" : "customBtn-blue"}">${modalInfo[i].type ?? "Chat"}</span>`;
+        tmpType.classList.add("backgroundLightWhite", "text-center");
+
         var tmpThAction = document.createElement("td");
         tmpThAction.classList.add("backgroundLightWhite", "text-center");
 
@@ -346,6 +517,7 @@ function loadModalTableData(modalInfo) {
         tmpTr.appendChild(tmpThSr);
         tmpTr.appendChild(tmpThName);
         tmpTr.appendChild(tmpThSize);
+        tmpTr.appendChild(tmpType);
         tmpTr.appendChild(tmpThAction);
         tmpTr.appendChild(tmpThDownload);
 
@@ -357,7 +529,7 @@ function loadModalTableData(modalInfo) {
 //This will download the modal based on user request
 function downloadModalOnline(modalDownloadRowId) {
     if (localStorage.getItem("isDownloaing") && localStorage.getItem("isDownloaing") == "true") {
-        alert("Download is already in process.Please wait till complete")
+        showSweetAlert("warning", "Oops...", "Download is already in process.Please wait till complete");
         return;
     }
     if (!localStorage.getItem("isDownloaing") || localStorage.getItem("isDownloaing").length == 0 || localStorage.getItem("isDownloaing") == "false") {
@@ -366,9 +538,10 @@ function downloadModalOnline(modalDownloadRowId) {
     localStorage.setItem("stopDownload", "false");
 
     let tmpDownloadRow = document.getElementById(modalDownloadRowId);
-    tmpDownloadRow.getElementsByTagName("td")[3].getElementsByClassName("startDownload")[0].hidden = true;//Start Button
-    tmpDownloadRow.getElementsByTagName("td")[3].getElementsByClassName("stopDownload")[0].hidden = false;//Show Stop Button
-    let tmpDownloadStatus = tmpDownloadRow.getElementsByTagName("td")[4];
+    console.log(tmpDownloadRow)
+    tmpDownloadRow.getElementsByTagName("td")[4].getElementsByClassName("startDownload")[0].hidden = true;//Start Button
+    tmpDownloadRow.getElementsByTagName("td")[4].getElementsByClassName("stopDownload")[0].hidden = false;//Show Stop Button
+    let tmpDownloadStatus = tmpDownloadRow.getElementsByTagName("td")[5];
 
     let tmpDownloadStatusSpan = tmpDownloadStatus.getElementsByTagName("span")[2];
     tmpDownloadStatusSpan.classList.remove('customBtn-danger');
@@ -476,7 +649,7 @@ function downloadModalOnline(modalDownloadRowId) {
 
                         // Check if the response indicates "done: true"
                         if (jsonData.status && jsonData.status == "success") {
-                            alert("Download Complete");
+                            showSweetAlert("success", "", "Download Complete");
                             localStorage.setItem("isDownloaing", "false")
                             setModalSettingsList();//Load Latest Data
                             window.location.reload();
@@ -495,18 +668,18 @@ function downloadModalOnline(modalDownloadRowId) {
             });
 
     } else {
-        alert("Opps ollama modal is not running please check.")
+        showSweetAlert("error", "Opps...", "Ollama modal is not running please check.");
     }
 }
 
 //This will stop the download of modal
 function stopDownload(modalDownloadRowId) {
     let tmpDownloadRow = document.getElementById(modalDownloadRowId);
-    let tmpDownloadStatus = tmpDownloadRow.getElementsByTagName("td")[4];
+    let tmpDownloadStatus = tmpDownloadRow.getElementsByTagName("td")[5];
     tmpDownloadStatus.innerHTML = `<span class="badge text-black" hidden=""><div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div></span><span class='badge text-black customBtn-danger'>DOWNLOAD STOPPED</span>`;
 
-    tmpDownloadRow.getElementsByTagName("td")[3].getElementsByClassName("stopDownload")[0].hidden = true;
-    tmpDownloadRow.getElementsByTagName("td")[3].getElementsByClassName("startDownload")[0].hidden = false;
+    tmpDownloadRow.getElementsByTagName("td")[4].getElementsByClassName("stopDownload")[0].hidden = true;
+    tmpDownloadRow.getElementsByTagName("td")[4].getElementsByClassName("startDownload")[0].hidden = false;
 
     localStorage.setItem("stopDownload", "true");
     localStorage.setItem("isDownloaing", "false")
@@ -515,7 +688,7 @@ function stopDownload(modalDownloadRowId) {
 //This will delete modal
 function deleteModalOnline(modalDownloadRowId) {
     let tmpDownloadRow = document.getElementById(modalDownloadRowId);
-    let tmpDownloadStatus = tmpDownloadRow.getElementsByTagName("td")[4];
+    let tmpDownloadStatus = tmpDownloadRow.getElementsByTagName("td")[5];
 
     let tmpDownloadStatusSpan = tmpDownloadStatus.getElementsByTagName("span")[2];
 
@@ -613,7 +786,7 @@ function setModalSettingsList() {
     document.getElementById("parseContent").checked = parseContent;
     document.getElementById("ollamaPort").value = ollamaPort;
     document.getElementById("hostName").value = hostAddress;
-    document.getElementById("chatHistory")[remTotalChat - 1].selected = true;
+    document.getElementById("tmpChatHistory")[remTotalChat].selected = true;
 
     if (localStorage.getItem("requestProtocol") == "http") {
         document.getElementsByClassName("requestProtocol")[0].checked = true;
@@ -645,9 +818,10 @@ function setModalSettingsList() {
             // console.log(data.models);
             var modelsList = data.models;
             var modelSelect = document.getElementById("modalList");
+            var ragSelect = document.getElementById("ragModallList");
             var downloadedList = document.getElementById("presentModalList");
-            downloadedList.innerHTML = modelSelect.innerHTML = "";
-            downloadedList.innerHTML = modelSelect.innerHTML = "<option disabled selected>Select Modal</option>";
+            downloadedList.innerHTML = modelSelect.innerHTML = ragSelect.innerHTML = "";
+            downloadedList.innerHTML = modelSelect.innerHTML = ragSelect.innerHTML = "<option disabled selected>Select Modal</option>";
 
             for (i = 0; i < modelsList.length; i++) {
                 var tmpOption = document.createElement("option");
@@ -655,14 +829,26 @@ function setModalSettingsList() {
                 tmpOption.innerHTML = modelsList[i].name + " " + modelsList[i].details.parameter_size;
 
                 var selectedModal = localStorage.getItem("ollamaModal");
+                var selectedRagModal = localStorage.getItem("ollamaRagModal");
 
                 if (selectedModal == modelsList[i].name) {
                     tmpOption.selected = true;
                 }
 
                 var tmpOptionClone = tmpOption.cloneNode(true);
+                var tmpRagClone = tmpOption.cloneNode(true);
+                //Select selected rag modal
+                if (selectedRagModal == modelsList[i].name) {
+                    tmpRagClone.selected = true;
+                }
+
                 downloadedList.appendChild(tmpOptionClone);
-                modelSelect.appendChild(tmpOption);
+                if (isModalPresent(modelsList[i].name, "Chat")) {
+                    modelSelect.appendChild(tmpOption);
+                }
+                if (isModalPresent(modelsList[i].name, "Embedding")) {
+                    ragSelect.appendChild(tmpRagClone);
+                }
             }
             setMessage("settingsMessage", "<img class='customIcon' src='static/images/verify.gif' />Modal loaded successfully", 0);
             setMessage("downloadMessage", "<img class='customIcon' src='static/images/verify.gif' />Modal loaded successfully", 0);

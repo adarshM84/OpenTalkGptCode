@@ -1,0 +1,147 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+body {
+    background: linear-gradient(to bottom right, #d7f1fa, #f1f8fd);
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    height: 100vh;
+}
+
+/* Main container */
+.container {
+    width: 85%;
+    /* max-width: 900px; */
+    background: #e8f6ff;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+/* Header */
+.container h2 {
+    color: #333;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* Status bar */
+.status {
+    background: #fff9e6;
+    border: 1px solid #f0e4b6;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #444;
+    font-weight: 500;
+}
+
+/* File input */
+#pdfInput {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 2px dashed #bcd3f2;
+    border-radius: 10px;
+    background-color: #f9fcff;
+    cursor: pointer;
+}
+
+/* Chat area */
+#chatMain {
+    min-height: 50vh;
+    max-height: 50vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: left;
+    margin-bottom: 15px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Messages */
+.user {
+    background: #e4f1ff;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+    white-space: pre-line;
+    line-height: normal;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.bot {
+    background: #f0f8e8;
+    padding: 10px 15px;
+    border-radius: 10px;
+    white-space: pre-line;
+    line-height: normal;
+    color: #444;
+    font-size: 16px;
+}
+
+.ragLoading {
+    background: #f0f8e8;
+    margin: 9px 0px;
+    border-radius: 10px;
+    padding: 8px 6px;
+}
+
+/* Input area */
+.input-area {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.questionInput {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #cfd7e4;
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+}
+
+#askBtn {
+    background: #b2f2bb;
+    color: #1b4332;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+#askBtn:hover {
+    background: #95e0a6;
+}
+
+/* Scrollbar customization */
+#chat::-webkit-scrollbar {
+    width: 8px;
+}
+
+#chat::-webkit-scrollbar-thumb {
+    background: #cfd7e4;
+    border-radius: 10px;
+}
+
+#chat::-webkit-scrollbar-track {
+    background: #f7f7f7;
+}

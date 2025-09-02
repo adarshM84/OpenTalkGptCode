@@ -7,10 +7,12 @@
     <link rel="icon" type="images/x-icon" href="icon48.png">
     <link rel="stylesheet" type="text/css" href="static/css/common.css">
     <link href="static/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="static/js/sweetalert2.all.min.js"></script>
+    <link href="static/css/sweetalert2.min.css" rel="stylesheet">
     <meta name="description"
         content="OpenTalkGPT Chrome extension lets you chat seamlessly with open-source AI models like LLaMA via Ollama. With a sleek UI, configure servers, manage models, and personalize your AI assistant. Perfect for AI enthusiasts and developers to download, delete, or modify models easily." />
     <meta name="keywords"
-        content="chatgpt,ollama,ollmaui,ollama ui,talk gpt,OpenTalkGPT, Chrome extension, LLaMA, Ollama, AI assistant, open-source models, chat with AI, manage models, download models, personalize AI, AI developers, AI enthusiasts, server configuration,ollama extention,chrome extention,free ai tools,ai tools,best extention,chatgpt extention" />
+        content="DeepSeek,DeepSeek UI,DeepSeek api,Free api,free ai,chatgpt,ollama,ollmaui,ollama ui,talk gpt,OpenTalkGPT, Chrome extension, LLaMA, Ollama, AI assistant, open-source models, chat with AI, manage models, download models, personalize AI, AI developers, AI enthusiasts, server configuration,ollama extention,chrome extention,free ai tools,ai tools,best extention,chatgpt extention" />
     <meta name="author" content="Adarsh Mishra" />
     <meta name="robots" content="index, follow" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,53 +20,7 @@
 
 <body>
     <!-- nav bar start -->
-    <nav class="navbar sticky-top navbar-light bg-dark text-light mb-4">
-        <div class="container-fluid">
-            
-            <select class="form-select w-25 ollamaSettings" id="selectSavedChat">
-                <option value="">Select Saved Chat</option>
-                <option value="home">HOME</option>
-            </select>
-            <h4 id="headTitle" class="text-center">
-                <i style="color:rgba(255, 165, 0, 0.85);;font-size: 1.5rem !important;">
-                    OpenTalkGPT
-                </i>
-            </h4>
-            <div class="buttongGroup">
-                <span class="badge text-black customBtn-primary" id="modalInfo" title="Seleted modal">DOWNLOADED</span>
-                <span title="Settings" class="mx-2 oppenSettingsModal" id="openSettingIcon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                        class="bi bi-gear-wide-connected svg-Me" viewBox="0 0 16 16">
-                        <path
-                            d="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z" />
-                    </svg>
-                </span>
-                <span title="About Me" id="opneIntroIcon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                        class="bi bi-person-circle svg-Me" viewBox="0 0 16 16">
-                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                        <path fill-rule="evenodd"
-                            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
-                    </svg>
-                </span>
-                <a href="#" title="What's New" id="openFeatureList">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                        class="mx-2 bi bi-newspaper svg-Me glowingSvg" viewBox="0 0 16 16">
-                        <path
-                            d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5zM12 14c.37 0 .654-.211.853-.441.092-.106.147-.279.147-.531V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5z" />
-                        <path
-                            d="M2 3h10v2H2zm0 3h4v3H2zm0 4h4v1H2zm0 2h4v1H2zm5-6h2v1H7zm3 0h2v1h-2zM7 8h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2zm-3 2h2v1H7zm3 0h2v1h-2z" />
-                    </svg>
-                </a>
-                <a href="faq.html" title="FAQ">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                        class="bi bi-question-circle-fill svg-Me" viewBox="0 0 16 16">
-                        <path
-                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247m2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
-                    </svg>
-                </a>
-            </div>
-        </div>
+    <nav class="navbar sticky-top text-dark mb-4 ourNav" id="indexNav">
     </nav>
     <!-- nav bar start -->
 
@@ -85,6 +41,10 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <ul>
+                                    <li class="fs-5 mt-3">New option added <strong>RAG:</strong> You can now upload and ask questions
+                                        using this feature. To use it, download and select
+                                        <strong>nomic-embed-text:latest</strong> from the settings.</li>
+                                    </li>
                                     <li class="fs-5 mt-3"><strong>Discover TextLLaMA:</strong> Looking for a tool to
                                         check grammar with a right-click, compose emails, and translate? Check out our
                                         new extension <a target="_blank"
@@ -225,10 +185,18 @@
                             <div class="mb-2 row">
                                 <!-- Modal List -->
                                 <div class="mb-2 row">
-                                    <label class="col-sm-3 col-form-label">Modal List</label>
+                                    <label class="col-sm-3 col-form-label">Chat Modal List</label>
                                     <div class="col-sm-9">
                                         <select class="form-select w-50 ollamaSettings"
                                             aria-label="Default select example" id="modalList">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-2 row">
+                                    <label class="col-sm-3 col-form-label">Rag Modal List</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-select w-50 ollamaSettings"
+                                            aria-label="Default select example" id="ragModallList">
                                         </select>
                                     </div>
                                 </div>
@@ -309,8 +277,9 @@
                                             <th scope="col" class="backgroundLightWhite">#</th>
                                             <th scope="col" class="backgroundLightWhite w-15">Modal Name</th>
                                             <th scope="col" class="backgroundLightWhite w-15 text-center">Size</th>
+                                            <th scope="col" class="backgroundLightWhite w-15 text-center">Use</th>
                                             <th scope="col" class="backgroundLightWhite w-15 text-center">Action</th>
-                                            <th scope="col" class="backgroundLightWhite w-50">Status</th>
+                                            <th scope="col" class="backgroundLightWhite w-40">Status</th>
                                         </tr>
                                     </thead>
                                     <tbody id="modalTableBody">
@@ -638,7 +607,11 @@
                 <p class="card-text">Not able to connect with a ollama modal.Please check ollama running or not or check
                     modal settings at
                     <a href="#" class="oppenSettingsModal">here.</a><br><br>If you are here for first time then download
-                    the ollama from <a href="#" class="oppenSettingsModal">here.</a> to do setup.<br><br>
+                    the ollama from <a href="#" class="oppenSettingsModal">here.</a> to do setup.
+
+                    <br><br><i>For initial setup you can document given at here <a
+                            href="https://www.builddevops.com/post/bringing-ai-offline-llama-local-models-for-chrome-extensions"
+                            class="oppenSettingsModal">here.</a> to do setup.</i><br><br>
                     <span> <strong>Basic Tips :</strong>
                         <ul>
                             <li>Always upgrage your modal with latest version.</li>
@@ -672,8 +645,8 @@
             <div class="row">
                 <div class="col-md-11"></div>
                 <div class="col-md-1 saveChatDiv reactSvg" id="saveChatBtn" hidden>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-floppy-fill"
-                        viewBox="0 0 16 16">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                        class="bi bi-floppy-fill" viewBox="0 0 16 16">
                         <title>Save Chat</title>
                         <path
                             d="M0 1.5A1.5 1.5 0 0 1 1.5 0H3v5.5A1.5 1.5 0 0 0 4.5 7h7A1.5 1.5 0 0 0 13 5.5V0h.086a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5H14v-5.5A1.5 1.5 0 0 0 12.5 9h-9A1.5 1.5 0 0 0 2 10.5V16h-.5A1.5 1.5 0 0 1 0 14.5z" />
