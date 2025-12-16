@@ -867,5 +867,37 @@ function setModalSettingsList() {
             showElement("chatContainer", false);
             console.error('There was a problem with the fetch operation:', error);
         }));
+    }
 
-}
+        document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("darkModeToggle");
+  if (!toggle) return;
+
+  const body = document.body;
+
+
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const body = document.body;
+  const toggle = document.getElementById("darkModeToggle");
+
+  if (!toggle) return;
+
+  // Load saved preference
+  if (localStorage.getItem("darkMode") === "enabled") {
+    body.classList.add("dark-mode");
+    toggle.checked = true;
+  }
+
+  toggle.addEventListener("change", () => {
+    body.classList.toggle("dark-mode", toggle.checked);
+    localStorage.setItem(
+      "darkMode",
+      toggle.checked ? "enabled" : "disabled"
+    );
+  });
+});
+
+
+
+
