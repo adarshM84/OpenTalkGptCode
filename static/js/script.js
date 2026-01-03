@@ -637,7 +637,7 @@ function setRole(event, isCoustom = false, inputId = "") {
 function createModal() {
     var customModalName = document.getElementById("customModalName").value.trim();
     var selectedModal = document.getElementById("presentModalList").value.trim();
-    var modalInstruction = document.getElementById("modalInstruction").value.trim().replace("\n", "");
+    var modalInstruction = document.getElementById("modalInstruction").value.trim().replace(/\n/g, " ");
     var isValidName = validateString(customModalName, "modalName");
     var isValidInstruction = validateString(customModalName, "modalInstruction");
 
@@ -671,12 +671,16 @@ function createModal() {
         return false;
     }
 
-    var modelfile = "FROM " + selectedModal + "\nSYSTEM " + modalInstruction;
+    var modelfile = `FROM ${selectedModal}\nSYSTEM ${modalInstruction}`;
+
 
     if (localStorage.getItem("ModalWorking") && localStorage.getItem("ModalWorking") == "1") {
         const data = {
-            model: customModalName,
-            modelfile: modelfile
+            name: customModalName,
+            modelfile: modelfile,
+            stream: true,
+            from: selectedModal,
+            system: modalInstruction
         };
 
         var apiUrl = localStorage.getItem("modalConnectionUri") + "/api/create";

@@ -826,11 +826,10 @@ function setModalSettingsList() {
                 }
 
                 downloadedList.appendChild(tmpOptionClone);
-                if (isModalPresent(modelsList[i].name, "Chat")) {
-                    modelSelect.appendChild(tmpOption);
-                }
                 if (isModalPresent(modelsList[i].name, "Embedding")) {
                     ragSelect.appendChild(tmpRagClone);
+                } else {
+                    modelSelect.appendChild(tmpOption);
                 }
             }
             setMessage("settingsMessage", "<img class='customIcon' src='static/images/verify.gif' />Modal loaded successfully", 0);
