@@ -41,9 +41,11 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <ul>
-                                    <li class="fs-5 mt-3">New option added <strong>RAG:</strong> You can now upload and ask questions
+                                    <li class="fs-5 mt-3">New option added <strong>RAG:</strong> You can now upload and
+                                        ask questions
                                         using this feature. To use it, download and select
-                                        <strong>nomic-embed-text:latest</strong> from the settings.</li>
+                                        <strong>nomic-embed-text:latest</strong> from the settings.
+                                    </li>
                                     </li>
                                     <li class="fs-5 mt-3"><strong>Discover TextLLaMA:</strong> Looking for a tool to
                                         check grammar with a right-click, compose emails, and translate? Check out our
@@ -111,71 +113,14 @@
                         <!-- Ollama Setting Start -->
                         <div class="container scrollDiv settingsContDiv" id="ollamaSettingsDiv">
                             <h4 id="ollamaSettingsDiv">Modal Settings</h4>
-                            <div class="mb-2 row">
-                                <label for="settingsType" class="col-sm-3 col-form-label">Settings Type</label>
-                                <div class="d-flex align-items-center">
-                                    <div class="form-check col-sm-3">
-                                        <input class="form-check-input settingsType ollamaSettings" type="radio"
-                                            name="settingsType" value="basic">
-                                        <label class="form-check-label mx-1" for="basicSettings">
-                                            Basic
-                                        </label>
-                                    </div>
-                                    <div class="form-check col-sm-2">
-                                        <input class="form-check-input settingsType ollamaSettings" type="radio"
-                                            name="settingsType" value="advance">
-                                        <label class="form-check-label" for="advanceSettings">
-                                            Advance
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Advance settings -->
-                            <div class="row" id="advanceSettings">
-                                <div class="mb-2 row">
-                                    <label for="requestProtocol" class="col-sm-3 col-form-label">Protocol</label>
-                                    <div class="col-sm-10 d-flex align-items-center">
-                                        <div class="form-check col-sm-2">
-                                            <input class="form-check-input ollamaSettings requestProtocol" type="radio"
-                                                name="requestProtocol" id="httpProtocol" value="http">
-                                            <label class="form-check-label mx-1" for="httpProtocol">
-                                                Http
-                                            </label>
-                                        </div>
-                                        <div class="form-check col-sm-2">
-                                            <input class="form-check-input ollamaSettings requestProtocol" type="radio"
-                                                name="requestProtocol" id="httpsProtocol" value="https">
-                                            <label class="form-check-label" for="httpsProtocol">
-                                                Https
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mb-2 row">
-                                    <label for="hostName" class="col-sm-3 col-form-label">Hostname</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control w-50 ollamaSettings"
-                                            placeholder="localhost" id="hostName" value="localhost">
-                                    </div>
-                                </div>
-                                <div class="mb-2 row">
-                                    <label for="ollamaPort" class="col-sm-3 col-form-label">Port</label>
-                                    <div class="col-sm-9">
-                                        <input type="Port" value="11434" class="form-control w-50 ollamaSettings"
-                                            placeholder="11434" id="ollamaPort">
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Advance settings end -->
-
                             <!-- Basic Settings  -->
-                            <div class="mb-2 row" id="basicSettings" hidden>
+                            <div class="mb-2 row" id="basicSettings">
                                 <div class="row">
                                     <label for="modalUri" class="col-sm-3 col-form-label">Uri</label>
                                     <div class="col-sm-9">
                                         <input type="text" id="modalConnectionUri" name="modalConnectionUri"
                                             class="form-control w-50 ollamaSettings"
-                                            placeholder="Please enter value like http://localhost:11434" id="hostName"
+                                            placeholder="Please enter value like http://localhost:11434"
                                             value="http://localhost:11434">
                                     </div>
                                 </div>

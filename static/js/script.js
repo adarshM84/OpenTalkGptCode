@@ -19,14 +19,14 @@ if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.id) {
         const rules = [{
             id: 1,
             condition: {
-                requestDomains: domains
+                urlFilter: domain
             },
             action: {
                 type: 'modifyHeaders',
                 requestHeaders: [{
                     header: 'origin',
                     operation: 'set',
-                    value: `${localStorage.getItem("requestProtocol")}://${domain}`,
+                    value: `${localStorage.getItem("modalConnectionUri")}`,
                 }],
             },
         }];
@@ -38,8 +38,8 @@ if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.id) {
 }
 
 //On Load Settings
-window.onload = () => {
-    loadNav("indexNav","index");
+window.onload = async () => {
+    loadNav("indexNav", "index");
     initializeLocalStorageDefaults();
 
     if (localStorage.getItem("ollamaModal") && localStorage.getItem("ollamaModal") !== null && localStorage.getItem("ollamaModal").length != 0) {
@@ -49,36 +49,28 @@ window.onload = () => {
       </svg> `+ localStorage.getItem("ollamaModal");
     }
     localStorage.setItem("botDesc", null);
-    if (localStorage.getItem("settingsType") == "basic") {
-        localStorage.setItem("settingsType", "basic");
-        showElement("basicSettings", true);
-        showElement("advanceSettings", false);
-    } else {
-        localStorage.setItem("settingsType", "advance");
-        showElement("basicSettings", false);
-        showElement("advanceSettings", true);
-    }
+    localStorage.setItem("settingsType", "basic");
     document.getElementById("resetSettings").addEventListener("click", function () {
         if (confirm("Are you sure want to reset settings ?")) {
             localStorage.clear();
-            showSweetAlert("success","","Setting reset done.Now page will reload to apply changes.")
+            showSweetAlert("success", "", "Setting reset done.Now page will reload to apply changes.")
             window.location.reload();
         }
     });
 
     setSavedChat();
-    setHostAddress(localStorage.getItem("hostAddress"));//To Do a post call for chat with ollama modals
+    await setHostAddress(localStorage.getItem("hostAddress"));//To Do a post call for chat with ollama modals
     setModalSettingsList();
     setButtonFunctionCalls();//To Set Function Call On Buttons 
 }
 // Set Function End
 var tmpChatHistory = [];
 
-function setHostAddress(hostName) {
+async function setHostAddress(hostName) {
     if (rebuildRules) {
-        rebuildRules(hostName);
+        return rebuildRules(hostName);
     }
-    else if (hostName.length > 0) rebuildRules(hostName);
+    else if (hostName.length > 0) return rebuildRules(hostName);
 }
 
 function initializeLocalStorageDefaults() {
@@ -86,9 +78,7 @@ function initializeLocalStorageDefaults() {
     setDefault("isDownloaing", "false", true);
     setDefault("stopChat", "false", true);
     setDefault("chatInProcess", "false", true);
-    setDefault("ollamaPort", "11434");
     setDefault("hostAddress", "localhost");
-    setDefault("requestProtocol", "http");
     setDefault("settingsType", "basic");
     setDefault("useEmoji", "false");
     setDefault("modalConnectionUri", "http://localhost:11434");
@@ -107,7 +97,7 @@ function setButtonFunctionCalls() {
     document.getElementById("saveChatBtn").addEventListener("click", function (event) {
         var tmpChatName = prompt("Enter chat name to save : ")
         if (tmpChatName.trim().length == 0) {
-            showSweetAlert("error","Please enter valid name.")
+            showSweetAlert("error", "Please enter valid name.")
         }
         // Retrieve the saved chat data from localStorage
         var tmpSavedChat = JSON.parse(localStorage.getItem("savedChat")) || [];
@@ -121,7 +111,7 @@ function setButtonFunctionCalls() {
         // Save the updated array back to localStorage
         localStorage.setItem("savedChat", JSON.stringify(tmpSavedChat));
         setSavedChat();
-        showSweetAlert("success","","Chat Saved !!")
+        showSweetAlert("success", "", "Chat Saved !!")
     });
     document.getElementById("userInput").addEventListener("keydown", function (event) {
         if (event.key === "Enter" && !event.shiftKey) {
@@ -231,60 +221,26 @@ function setSettings(event, loadSettings = true) {
         localStorage.setItem("useEmoji", event.target.checked);
     } else if (event.target.type == "checkbox" && event.target.id == "parseContent") {
         localStorage.setItem("parseContent", event.target.checked);
-    } else if (event.target.type == "text" && event.target.id == "hostName") {
-        if (event.target.value.trim().length == 0) {
-            showSweetAlert("success","","Please enter valid host name");
-            return;
-        }
-        setHostAddress(event.target.value);
-        localStorage.setItem("hostAddress", event.target.value);
     } else if (event.target.type == "text" && event.target.id == "modalConnectionUri") {
         if (event.target.value.trim().length == 0) {
-            showSweetAlert("success","","Please enter valid uri");
+            showSweetAlert("success", "", "Please enter valid uri");
             return;
         }
         localStorage.setItem("modalConnectionUri", event.target.value);
-    } else if (event.target.type == "text" && event.target.id == "ollamaPort") {
-        if (event.target.value.trim().length == 0) {
-            showSweetAlert("success","","Please enter valid port");
-            return;
-        }
-        localStorage.setItem("ollamaPort", event.target.value);
-    } else if (event.target.type == "radio" && event.target.name == "requestProtocol") {
-        const selectedRadio = document.querySelector('input[name="requestProtocol"]:checked');
-        if (selectedRadio) {
-            if (selectedRadio.value == "http") {
-                localStorage.setItem("requestProtocol", "http");
-            } else {
-                localStorage.setItem("requestProtocol", "https");
-            }
-        } else {
-            localStorage.setItem("requestProtocol", "http");
-        }
+        let url = new URL(event.target.value);
+        localStorage.setItem("hostAddress", url.hostname);
+        setHostAddress(url.hostname);
     } else if (event.target.type == "radio" && event.target.name == "settingsType") {
-        const selectedRadio = document.querySelector('input[name="settingsType"]:checked');
-        if (selectedRadio) {
-            if (selectedRadio.value == "basic") {
-                localStorage.setItem("settingsType", "basic");
-                showElement("basicSettings", true);
-                showElement("advanceSettings", false);
-            } else {
-                localStorage.setItem("settingsType", "advance");
-                showElement("basicSettings", false);
-                showElement("advanceSettings", true);
-            }
-        } else {
-            localStorage.setItem("settingsType", "basic");
-        }
+        localStorage.setItem("settingsType", "basic");
     } else if (event.target.type == "select-one" && event.target.id == "ragModallList") {
         if (event.target.value.trim().length == 0) {
-            showSweetAlert("success","","Please select modal");
+            showSweetAlert("success", "", "Please select modal");
             return;
         }
         localStorage.setItem("ollamaRagModal", event.target.value);
     } else if (event.target.type == "select-one" && event.target.id == "modalList") {
         if (event.target.value.trim().length == 0) {
-            showSweetAlert("success","","Please select modal");
+            showSweetAlert("success", "", "Please select modal");
             return;
         }
         localStorage.setItem("ollamaModal", event.target.value);
@@ -296,12 +252,15 @@ function setSettings(event, loadSettings = true) {
         localStorage.setItem("remTotalChat", event.target.value);
     } else if (event.target.type == "select-one" && event.target.id == "selectSavedChat") {
         showElement("welcomeDiv", event.target.value.length == 0);
-        if(event.target.value.toLowerCase()=="home") window.location.reload();
+        if (event.target.value.toLowerCase() == "home") window.location.reload();
         document.getElementById("chatContent").innerHTML = event.target.value;
         loadSettings = false;
     }
 
-    if (loadSettings) setModalSettingsList();
+    if (loadSettings) {
+        setMessage("settingsMessage", "<img class='customIcon' src='static/images/verify.gif' /> Value saved successfully", 0);
+        setModalSettingsList();
+    }
 }
 
 //To Show The Os Wise Download
@@ -356,7 +315,7 @@ function showOsWiseDownload(selectedDivId, isDefaut) {
 //Bot response
 function getQAnswer(isRoleSet) {
     if (localStorage.getItem("chatInProcess") == "true") {
-        showSweetAlert("error","Opps...","Chat is in process.Please stop the chat or wait till it complete.");
+        showSweetAlert("error", "Opps...", "Chat is in process.Please stop the chat or wait till it complete.");
         return;
     }
     if (localStorage.getItem("qId") == 'NaN' || !localStorage.getItem("qId")) {
@@ -364,11 +323,11 @@ function getQAnswer(isRoleSet) {
     }
     var userQuery = document.getElementById('userInput').value.trim();
     if (userQuery.length == 0) {
-        showSweetAlert("error","","Please enter question");
+        showSweetAlert("error", "", "Please enter question");
         return
     }
     if (!localStorage.getItem("ollamaModal") || localStorage.getItem("ollamaModal") == "null" || localStorage.getItem("ollamaModal").length == 0) {
-        showSweetAlert("error","","Please select or download any modal.");
+        showSweetAlert("error", "", "Please select or download any modal.");
         return;
     }
     const lastDivid = addMessage(userQuery, "", "question");
@@ -405,9 +364,7 @@ function getQAnswer(isRoleSet) {
         stream: true
     };
 
-    var apiUrl = "http://localhost:11434";
-    apiUrl = `${localStorage.getItem("requestProtocol")}://${localStorage.getItem("hostAddress")}:${localStorage.getItem("ollamaPort")}/api/chat`;
-    if (localStorage.getItem("settingsType") == "basic") apiUrl = localStorage.getItem("modalConnectionUri") + "/api/chat";
+    var apiUrl = localStorage.getItem("modalConnectionUri") + "/api/chat";
 
     fetch(apiUrl, {
         method: 'POST',
@@ -469,7 +426,7 @@ function getQAnswer(isRoleSet) {
                 try {
                     let jsonData = JSON.parse(jsonString);
                     if (jsonData.error) {
-                        showSweetAlert("error","Opps...","Not able to chat please check console for more.");
+                        showSweetAlert("error", "Opps...", "Not able to chat please check console for more.");
                         console.log(jsonData.error);
                         return;
                     }
@@ -503,7 +460,7 @@ function getQAnswer(isRoleSet) {
         })
         .catch(error => {
             if (localStorage.getItem("ModalWorking") && localStorage.getItem("ModalWorking") == '1') {
-                showSweetAlert("error","Opps...","May be modal is not downloaded or selected.");
+                showSweetAlert("error", "Opps...", "May be modal is not downloaded or selected.");
             } else {
                 alert('Error:', "There was a problem with the fetch operation"); // Display error if any
             }
@@ -529,7 +486,7 @@ function reAnswer(divId) {
     var ansDivId = "botResponse" + divId;
 
     if (localStorage.getItem("chatInProcess") == "true") {
-        showSweetAlert("warning","Opps...","Chat is in process.Please stop the chat or wait till it complete.");
+        showSweetAlert("warning", "Opps...", "Chat is in process.Please stop the chat or wait till it complete.");
         return;
     }
     if (localStorage.getItem("qId") == 'NaN' || !localStorage.getItem("qId")) {
@@ -537,11 +494,11 @@ function reAnswer(divId) {
     }
     var userQuery = document.getElementById(qDivId).textContent.trim();
     if (userQuery.length == 0) {
-        showSweetAlert("success","","Please enter question");
+        showSweetAlert("success", "", "Please enter question");
         return
     }
     if (!localStorage.getItem("ollamaModal") || localStorage.getItem("ollamaModal") == "null" || localStorage.getItem("ollamaModal").length == 0) {
-        showSweetAlert("success","","Please select or download any modal.");
+        showSweetAlert("success", "", "Please select or download any modal.");
         return;
     }
 
@@ -558,9 +515,7 @@ function reAnswer(divId) {
         stream: true
     };
 
-    var apiUrl = "http://localhost:11434";
-    apiUrl = `${localStorage.getItem("requestProtocol")}://${localStorage.getItem("hostAddress")}:${localStorage.getItem("ollamaPort")}/api/chat`;
-    if (localStorage.getItem("settingsType") == "basic") apiUrl = localStorage.getItem("modalConnectionUri") + "/api/chat";
+    var apiUrl = localStorage.getItem("modalConnectionUri") + "/api/chat";
 
     fetch(apiUrl, {
         method: 'POST',
@@ -622,7 +577,7 @@ function reAnswer(divId) {
                 try {
                     let jsonData = JSON.parse(jsonString);
                     if (jsonData.error) {
-                        showSweetAlert("error","Opps...","Not able to chat please check console for more.");
+                        showSweetAlert("error", "Opps...", "Not able to chat please check console for more.");
                         console.log(jsonData.error);
                         return;
                     }
@@ -648,9 +603,9 @@ function reAnswer(divId) {
         })
         .catch(error => {
             if (localStorage.getItem("ModalWorking") && localStorage.getItem("ModalWorking") == '1') {
-                showSweetAlert("error","Opps...","May be modal is not downloaded or selected.");
+                showSweetAlert("error", "Opps...", "May be modal is not downloaded or selected.");
             } else {
-                showSweetAlert("error","Opps...","There was a problem with the fetch operation");
+                showSweetAlert("error", "Opps...", "There was a problem with the fetch operation");
             }
             chatDone(true);
             console.error('There was a problem with the fetch operation:', error);
@@ -667,7 +622,7 @@ function setRole(event, isCoustom = false, inputId = "") {
     if (isCoustom) {
         botRole = document.getElementById(inputId).value.trim();
         if (botRole.length == 0) {
-            showSweetAlert("error","Opps...","Enter valid role");
+            showSweetAlert("error", "Opps...", "Enter valid role");
             return
         }
     } else {
@@ -724,9 +679,7 @@ function createModal() {
             modelfile: modelfile
         };
 
-        var apiUrl = "http://localhost:11434";
-        apiUrl = `${localStorage.getItem("requestProtocol")}://${localStorage.getItem("hostAddress")}:${localStorage.getItem("ollamaPort")}/api/create`;
-        if (localStorage.getItem("settingsType") == "basic") apiUrl = localStorage.getItem("modalConnectionUri") + "/api/create";
+        var apiUrl = localStorage.getItem("modalConnectionUri") + "/api/create";
         // Act as ben tenyson and talk in hindi only
         fetch(apiUrl, {
             method: 'POST',
@@ -804,7 +757,7 @@ function createModal() {
 
                         // Check if the response indicates "done: true"
                         if (jsonData.status && jsonData.status == "success") {
-                            showSweetAlert("success","","Modal Creation Completed.");
+                            showSweetAlert("success", "", "Modal Creation Completed.");
                             document.getElementById("customModalName").value = "";
                             document.getElementById("presentModalList")[0].selected = true;
                             document.getElementById("modalInstruction").value = "";
@@ -825,7 +778,7 @@ function createModal() {
             });
 
     } else {
-        showSweetAlert("error","Opps...","Ollama modal is not running please check.");
+        showSweetAlert("error", "Opps...", "Ollama modal is not running please check.");
     }
 
 }

@@ -1,4 +1,5 @@
 var i = 0;
+var isFetchingTags = false;
 var botMessage = "";
 var speed = 10;
 var allDownloadModalList = [
@@ -758,6 +759,8 @@ function setDownloadModalList(presentModal) {
 
 //Set Modal And Load Data Of Settings
 function setModalSettingsList() {
+    if (isFetchingTags) return;
+    isFetchingTags = true;
     if (!localStorage.getItem("ollamaPort") || localStorage.getItem("ollamaPort") == "null" || localStorage.getItem("ollamaPort").length == 0) {
         localStorage.setItem("ollamaPort", "11434");
     }
@@ -778,31 +781,10 @@ function setModalSettingsList() {
     var parseContent = localStorage.getItem("parseContent") == "true" ? true : false;
     var remTotalChat = localStorage.getItem("remTotalChat");
 
-    if (localStorage.getItem("settingsType") == "basic") {
-        document.getElementById("modalConnectionUri").value = localStorage.getItem("modalConnectionUri");
-    }
-
     document.getElementById("useEmogi").checked = useEmoji;
     document.getElementById("parseContent").checked = parseContent;
-    document.getElementById("ollamaPort").value = ollamaPort;
-    document.getElementById("hostName").value = hostAddress;
     document.getElementById("tmpChatHistory")[remTotalChat].selected = true;
-
-    if (localStorage.getItem("requestProtocol") == "http") {
-        document.getElementsByClassName("requestProtocol")[0].checked = true;
-        document.getElementsByClassName("requestProtocol")[1].checked = false;
-    } else {
-        document.getElementsByClassName("requestProtocol")[1].checked = true;
-        document.getElementsByClassName("requestProtocol")[0].checked = false;
-    }
-    //Settings Type
-    if (localStorage.getItem("settingsType") == "basic") {
-        document.getElementsByClassName("settingsType")[0].checked = true;
-        document.getElementsByClassName("settingsType")[1].checked = false;
-    } else {
-        document.getElementsByClassName("settingsType")[1].checked = true;
-        document.getElementsByClassName("settingsType")[0].checked = false;
-    }
+    document.getElementById("modalConnectionUri").value = localStorage.getItem("modalConnectionUri");
 
     var apiUrl = "http://localhost:11434";
     apiUrl = `${requestProtocol}://${hostAddress}:${ollamaPort}/api/tags`;
@@ -815,6 +797,7 @@ function setModalSettingsList() {
         }
     }).then((response) => response.json())
         .then((data) => {
+            isFetchingTags = false;
             // console.log(data.models);
             var modelsList = data.models;
             var modelSelect = document.getElementById("modalList");
@@ -858,6 +841,7 @@ function setModalSettingsList() {
             showElement("chatContainer", true);
         })
         .catch((error => {
+            isFetchingTags = false;
             var modelSelect = document.getElementById("modalList");
             modelSelect.innerHTML = "";
             setTimeout(function () { setMessage("settingsMessage", `<img class='customIcon' src='static/images/cross.gif' />Unable to connect to ollama.Please check server running or not through below url.<br><a target='_blank' href='${apiUrl}'>${apiUrl}<a><br><span class='text-success'> To install or make of ollama server click <a href='https://github.com/ollama/ollama/tree/main#user-content-ollama'>here</a> or download from Download Modal Section</span>`, 1) }, 100);
