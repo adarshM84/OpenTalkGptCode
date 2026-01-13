@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "OpenTalkGPT - UI to access DeepSeek,Llama or open source modal with rag.",
   "description": "This extension hosts an ollama ui on localhost and help you to access all open srouce modals.",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "action": {},
   "permissions": [
     "declarativeNetRequest",

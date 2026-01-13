@@ -28,6 +28,19 @@ if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.id) {
                     operation: 'set',
                     value: `${localStorage.getItem("modalConnectionUri")}`,
                 }],
+                responseHeaders: [{
+                    header: "Access-Control-Allow-Origin",
+                    operation: "set",
+                    value: "*"
+                }, {
+                    header: "Access-Control-Allow-Methods",
+                    operation: "set",
+                    value: "GET, POST, PUT, DELETE, OPTIONS"
+                }, {
+                    header: "Access-Control-Allow-Headers",
+                    operation: "set",
+                    value: "*"
+                }]
             },
         }];
         await chrome.declarativeNetRequest.updateDynamicRules({
